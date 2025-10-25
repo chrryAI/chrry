@@ -1,0 +1,1065 @@
+import React, { useCallback, useEffect, useState } from "react"
+
+import { usePlatform, useTheme } from "./platform"
+import clsx from "clsx"
+import styles from "./App.module.scss"
+import EnableNotifications from "./EnableNotifications"
+import Logo from "./Image"
+import Img from "./Image"
+import Instructions from "./Instructions"
+import {
+  ArrowRight,
+  CircleCheck,
+  CircleMinus,
+  Grip,
+  Info,
+  Pencil,
+  Settings2,
+  Trash2,
+} from "./icons"
+import toast from "react-hot-toast"
+import Loading from "./Loading"
+import ConfirmButton from "./ConfirmButton"
+import { useHasHydrated } from "./hooks"
+import { DraggableAppList } from "./DraggableAppList"
+import { DraggableAppItem } from "./DraggableAppItem"
+import { useAppReorder } from "./hooks/useAppReorder"
+import { Div, H1, Button, Label, Span, Input } from "./platform"
+import A from "./A"
+import { apiFetch } from "./utils"
+
+import { useStyles } from "./context/StylesContext"
+import {
+  useApp,
+  useAuth,
+  useChat,
+  useData,
+  useNavigationContext,
+} from "./context/providers"
+import { useAppContext } from "./context/AppContext"
+
+interface App {
+  id: string
+  name: string
+  slug: string
+  [key: string]: unknown
+}
+
+export default function App({
+  className,
+  onSave,
+}: {
+  className?: string
+  onSave?: ({
+    content,
+    artifacts,
+  }: {
+    content: string
+    artifacts: File[]
+  }) => void
+}) {
+  // Split contexts for better organization
+  const { t } = useAppContext()
+
+  // App context
+  const {
+    slug,
+    app,
+    appForm,
+    appFormWatcher,
+    suggestSaveApp,
+    saveApp,
+    canEditApp,
+    isManagingApp,
+    isSavingApp,
+    isRemovingApp,
+    removeApp,
+    owningApps,
+    setApp,
+    appStatus,
+    setAppStatus,
+    baseApp,
+    storeApp,
+  } = useApp()
+
+  // Auth context
+  const { user, guest, getAppSlug, store, apps, chrry } = useAuth()
+
+  const { FRONTEND_URL } = useData()
+
+  // Navigation context (router is the wrapper)
+  const { router, setIsNewChat } = useNavigationContext()
+
+  // Input context
+  const { setInput, setIsWebSearchEnabled } = useChat()
+
+  // Theme context
+  const { addHapticFeedback } = useTheme()
+  const currentStoreId = store?.id
+
+  const getApps = () => {
+    return apps
+      .filter((app) => app.id !== store?.appId)
+      .sort((a, b) => {
+        const aIsStoreBase =
+          a.id === a.store?.appId && a.store?.id === currentStoreId
+        const bIsStoreBase =
+          b.id === b.store?.appId && b.store?.id === currentStoreId
+        const aIsChrry = a.id === chrry?.id
+        const bIsChrry = b.id === chrry?.id
+
+        // Store base app always first
+        if (aIsStoreBase) return -1
+        if (bIsStoreBase) return 1
+
+        // Chrry always second
+        if (aIsChrry) return -1
+        if (bIsChrry) return 1
+
+        // Keep original order for the rest
+        return 0
+      })
+  }
+  // Use apps from context - sort: store base app first, Chrry second, rest keep original order
+  const [appsState, setApps] = React.useState(getApps())
+
+  useEffect(() => {
+    setApps(getApps())
+  }, [apps, store?.id, store?.appId, currentStoreId, baseApp])
+
+  // console.log(`🚀 ~ file: App.tsx:155 ~ appsState:`, appsState)
+  const [file, setFile] = React.useState<File | undefined>()
+
+  const [image, setImageInternal] = React.useState<string | undefined>(
+    app?.image || undefined,
+  )
+  const setImage = (image?: string) => {
+    setImageInternal(image)
+    setFile(undefined)
+  }
+
+  const hasHydrated = useHasHydrated()
+
+  const reorder = useAppReorder({
+    apps: appsState,
+    setApps,
+    autoInstall: true,
+  })
+
+  const { isWeb } = usePlatform()
+
+  const [imageDimensionWarning, setImageDimensionWarning] = React.useState<
+    string | null
+  >(null)
+
+  useEffect(() => {
+    if (app?.image) {
+      setImage(app.image)
+    } else if (app === null) {
+      setImage(undefined)
+      setFile(undefined)
+      setImageDimensionWarning(null)
+    }
+  }, [app, app?.image])
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    if (!target.files || !target.files[0]) return
+
+    const originalFile = target.files[0]
+
+    // Load image to check dimensions
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(originalFile)
+
+    img.onload = async () => {
+      URL.revokeObjectURL(objectUrl)
+
+      const { width, height } = img
+      const targetSize = 500
+
+      // If image is smaller than 500x500, show warning
+      if (width < targetSize || height < targetSize) {
+        setImageDimensionWarning(
+          t("Min 500x500px.", {
+            width,
+            height,
+          }),
+        )
+      } else {
+        setImageDimensionWarning(null)
+      }
+
+      // Create cropped preview (500x500, center crop with cover fit)
+      const canvas = document.createElement("canvas")
+      const ctx = canvas.getContext("2d")
+
+      if (!ctx) {
+        setFile(originalFile)
+        // setImage(URL.createObjectURL(originalFile))
+        return
+      }
+
+      // Set canvas to target size
+      canvas.width = targetSize
+      canvas.height = targetSize
+
+      // Calculate crop dimensions (cover fit - fill the square, crop excess)
+      const scale = Math.max(targetSize / width, targetSize / height)
+      const scaledWidth = width * scale
+      const scaledHeight = height * scale
+
+      // Center the image
+      const x = (targetSize - scaledWidth) / 2
+      const y = (targetSize - scaledHeight) / 2
+
+      // Draw cropped image
+      ctx.drawImage(img, x, y, scaledWidth, scaledHeight)
+
+      // Convert to blob for preview
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const croppedFile = new File([blob], originalFile.name, {
+            type: originalFile.type,
+            lastModified: Date.now(),
+          })
+          setFile(croppedFile)
+          setImage(URL.createObjectURL(croppedFile))
+
+          // Upload image immediately in background
+          setIsUploading(true)
+          try {
+            const formData = new FormData()
+            formData.append("file", croppedFile)
+
+            // If we have a draft ID, include it
+            const draftId = appFormWatcher?.id
+            if (draftId) {
+              formData.append("draftId", draftId)
+            }
+
+            const response = await apiFetch("/api/image", {
+              method: "POST",
+              body: formData,
+            })
+
+            if (!response.ok) {
+              throw new Error("Failed to upload image")
+            }
+
+            const data = await response.json()
+            console.log("✅ Image uploaded:", data.url)
+
+            appForm?.setValue("image", data.url)
+            app && setApp({ ...app, image: data.url })
+            setImage(data.url)
+          } catch (error) {
+            console.error("❌ Failed to upload image:", error)
+          } finally {
+            setIsUploading(false)
+          }
+        }
+      }, originalFile.type)
+    }
+
+    img.src = objectUrl
+  }
+  const [isUploading, setIsUploading] = useState(false)
+
+  const [inputKey, setInputKey] = React.useState(0) // Force re-render
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    ;(appStatus?.part === "highlights" || appStatus?.part === "title") &&
+      !canAddName &&
+      setAppStatus(undefined)
+  }, [appStatus, appFormWatcher])
+
+  const triggerFileInput = () => {
+    addHapticFeedback()
+
+    // Reset the input by changing its key (forces re-render)
+    setInputKey((prev) => prev + 1)
+
+    // Small delay to ensure the input is re-rendered before clicking
+    setTimeout(() => {
+      fileInputRef.current?.click()
+    }, 10)
+  }
+
+  const StoreApp = useCallback(
+    () =>
+      storeApp && (
+        <A
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+          }}
+          href={getAppSlug(storeApp)}
+          className={clsx("button transparent small")}
+          onClick={(e) => {
+            // if (isWeb) {
+            //   setTimeout(() => {
+            //     router.replace("/")
+            //   }, 200)
+            //   return
+            // }
+
+            e.preventDefault()
+
+            setIsNewChat(true, getAppSlug(storeApp))
+            addHapticFeedback()
+            setAppStatus(undefined)
+            if (e.metaKey || e.ctrlKey) {
+              return
+            }
+          }}
+        >
+          <Img app={storeApp} showLoading={false} size={24} />
+          <span>{storeApp?.name}</span>
+        </A>
+      ),
+    [t, app, user, guest],
+  )
+
+  const canAddName = appFormWatcher?.canSubmit
+
+  const canAddTitle = isManagingApp
+
+  const { appStyles, utilities } = useStyles()
+
+  if (!hasHydrated && (isManagingApp || appFormWatcher?.canSubmit)) {
+    return <Loading fullScreen />
+  }
+
+  return (
+    <Div>
+      <H1 style={appStyles.title.style}>
+        {!isManagingApp && !canEditApp && app ? (
+          <Div
+            style={appStyles.appTitle.style}
+            className={appStyles.appTitle.className}
+          >
+            <Logo
+              app={app}
+              logo={app?.slug === "vex" ? "isVivid" : undefined}
+              showLoading={false}
+              size={35}
+            />
+            {t(app?.title || appFormWatcher?.title || ("" as string))}
+          </Div>
+        ) : (
+          <Div
+            style={
+              isManagingApp
+                ? appStyles.titleFormContainer.style
+                : appStyles.titleFormTitle.style
+            }
+          >
+            {appFormWatcher?.canSubmit && isManagingApp && (
+              <Div style={utilities.row.style}>
+                <ConfirmButton
+                  className="small transparent"
+                  confirm={
+                    <>
+                      {isRemovingApp ? (
+                        <Loading size={18} />
+                      ) : (
+                        <Trash2 color="var(--accent-0)" size={18} />
+                      )}
+                      {t("Delete")}
+                    </>
+                  }
+                  disabled={isSavingApp || isRemovingApp}
+                  onConfirm={async () => {
+                    await removeApp()
+                  }}
+                >
+                  <Trash2 color="var(--accent-0)" size={18} />
+                </ConfirmButton>
+                <Button
+                  onClick={async () => {
+                    await saveApp()
+                  }}
+                  className="small inverted"
+                  disabled={!appFormWatcher.canSubmit || isSavingApp}
+                >
+                  {isSavingApp ? (
+                    <Loading size={18} />
+                  ) : (
+                    <CircleCheck color="var(--accent-4)" size={18} />
+                  )}
+                  {t("Save")}
+                </Button>
+              </Div>
+            )}
+            {appStatus?.part === "title" && (
+              <Div
+                style={appStyles.validationFeedback}
+                className={appStyles.validationFeedback.className}
+              >
+                {/* Show validation errors (except title) */}
+                {appForm?.formState.errors.name && (
+                  <Div>
+                    ❌ {t(appForm.formState.errors.name.message as string)}
+                  </Div>
+                )}
+                {appForm?.formState.errors.description && (
+                  <Div>
+                    ❌{" "}
+                    {t(appForm.formState.errors.description.message as string)}
+                  </Div>
+                )}
+                {appForm?.formState.errors.placeholder && (
+                  <Div>
+                    ❌{" "}
+                    {t(appForm.formState.errors.placeholder.message as string)}
+                  </Div>
+                )}
+
+                {/* Image dimension warning/recommendation */}
+                <Div
+                  style={{
+                    ...appStyles.validationFeedback.style,
+                    ...utilities.row.style,
+                  }}
+                >
+                  {imageDimensionWarning ? (
+                    <>⚠️ {imageDimensionWarning}</>
+                  ) : (
+                    <>💭 {t("500x500px .png recommended")}</>
+                  )}
+                </Div>
+              </Div>
+            )}
+            {isManagingApp ? (
+              <div className={styles.titleForm}>
+                <div className={styles.appImageContainer}>
+                  {image && (
+                    <Button
+                      onClick={() => {
+                        setImage(undefined)
+                        setFile(undefined)
+                      }}
+                      title={t("Remove")}
+                      aria-label={t("Remove")}
+                      style={{
+                        ...utilities.link,
+                        ...appStyles.removeImageButton,
+                      }}
+                      className={clsx(
+                        utilities.link.className,
+                        appStyles.removeImageButton.className,
+                      )}
+                    >
+                      <CircleMinus color="var(--accent-1)" size={14} />
+                    </Button>
+                  )}
+                  <Button
+                    disabled={isUploading}
+                    title={t("Edit")}
+                    aria-label={t("Edit")}
+                    onClick={() => triggerFileInput()}
+                    style={{
+                      ...appStyles.appImageWrapper,
+                      ...utilities.link,
+                    }}
+                    className={clsx(
+                      appStyles.appImageWrapper.className,
+                      utilities.link.className,
+                    )}
+                  >
+                    <Img
+                      src={image}
+                      showLoading={false}
+                      icon="spaceInvader"
+                      app={app}
+                      alt="Space Invader"
+                      title={t("Space Invader")}
+                      className={styles.appImage}
+                      width={40}
+                      height={40}
+                      style={{
+                        position: "relative",
+                        bottom: "0.4rem",
+                      }}
+                    />
+                    <Span
+                      style={{
+                        ...utilities.button,
+                        ...utilities.transparent,
+                        ...utilities.small,
+                        ...appStyles.editImageButton,
+                      }}
+                    >
+                      {isUploading ? (
+                        <Loading width={12} height={12} />
+                      ) : (
+                        <Pencil size={12} />
+                      )}
+                    </Span>
+                  </Button>
+                </div>
+                <label htmlFor="title">
+                  <div className={styles.nameWithTip}>
+                    <input
+                      {...appForm?.register("title")}
+                      title={t("Title")}
+                      id="title"
+                      className={styles.titleInput}
+                      type="text"
+                      placeholder={t("Title")}
+                    />
+                  </div>
+                </label>
+                {isManagingApp &&
+                  appStatus?.part !== "name" &&
+                  appStatus?.part !== "highlights" && (
+                    <button
+                      disabled={!canAddTitle}
+                      onClick={() => {
+                        if (canAddTitle) {
+                          setAppStatus({
+                            currentStep: "add",
+                            part: appFormWatcher.name ? "highlights" : "name",
+                          })
+                        }
+                      }}
+                      className={clsx(
+                        "small",
+                        styles.continueButton,
+                        canAddTitle ? "" : "transparent",
+                      )}
+                      title={t("Continue")}
+                    >
+                      <ArrowRight />
+                    </button>
+                  )}
+              </div>
+            ) : appFormWatcher && appFormWatcher.canSubmit ? (
+              <div className={styles.titleFormTitle}>
+                <Logo app={app} showLoading={false} logo="isVivid" size={35} />
+                {t(appFormWatcher?.title || "Your personal AI agent")}
+              </div>
+            ) : (
+              <div className={styles.titleFormTitle}>
+                <Logo
+                  app={app}
+                  logo="isMagenta"
+                  showLoading={false}
+                  size={35}
+                />
+                {t("Your personal AI agent")}
+              </div>
+            )}
+
+            <input
+              key={inputKey}
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          </Div>
+        )}
+      </H1>
+
+      <Div style={{ ...appStyles.container.style }}>
+        <>
+          <Div style={{ ...appStyles.section.style }}>
+            <EnableNotifications
+              onLocationClick={(location) => {
+                setInput(`What's the weather in ${location}?`)
+                setIsWebSearchEnabled(true)
+              }}
+            />
+          </Div>
+          <Div style={{ ...appStyles.section.style }}>
+            {appStatus?.part ? null : (
+              <Button
+                style={{
+                  ...utilities.link,
+                  gap: "0.5rem",
+                  fontSize: "0.7rem",
+                  position: "relative",
+                }}
+                key={suggestSaveApp ? "highlights" : "settings"}
+                onClick={() => {
+                  if (user?.role !== "admin") {
+                    if (user && owningApps.length >= 3) {
+                      toast.error(
+                        t("Users can have 3 agents, contact for more"),
+                      )
+                      return
+                    }
+                    if (guest && owningApps.length >= 2) {
+                      toast.error(t("Guests can have 2 agent, login for more"))
+                      return
+                    }
+                  }
+
+                  setAppStatus({
+                    part: "settings",
+                  })
+                }}
+                title={t(isManagingApp ? "Cancel" : "Add agent")}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "0.15rem",
+                    right: "-0.50rem",
+                  }}
+                >
+                  🤯
+                </span>
+                <Img
+                  showLoading={false}
+                  alt="Plus"
+                  width={24}
+                  height={24}
+                  icon="plus"
+                />
+              </Button>
+            )}
+            {appStatus?.part === "name" ? (
+              <Div style={appStyles.agentNameForm.style}>
+                <Div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginTop: appStatus?.part === "name" ? "1.25rem" : "0",
+                  }}
+                >
+                  <Label
+                    htmlFor="agentName"
+                    style={{
+                      ...appStyles.nameField.style,
+                      paddingInline: "0.5rem",
+                      ...(appForm?.formState.errors.name?.message
+                        ? appStyles.error.style
+                        : {}),
+                    }}
+                  >
+                    <Img
+                      style={{
+                        marginLeft: "auto",
+                      }}
+                      showLoading={false}
+                      icon="spaceInvader"
+                      alt="Space Invader"
+                      title={t("Space Invader")}
+                      width={24}
+                      height={24}
+                    />
+                    <Div style={{ position: "relative" }}>
+                      <Div
+                        style={{
+                          ...appStyles.info.style,
+                          ...(appForm?.formState.errors.name?.message &&
+                            appStyles.error),
+                          display: "inline",
+                        }}
+                      >
+                        {appForm?.formState.errors.name?.message ? (
+                          <Span style={appStyles.field.style}>
+                            {t(appForm?.formState.errors.name.message)}
+                          </Span>
+                        ) : (
+                          <Span style={appStyles.field.style}>
+                            {t("Keep it short!")}
+                          </Span>
+                        )}
+                      </Div>
+                      <Input
+                        {...appForm?.register("name")}
+                        title={t("Name")}
+                        id="agentName"
+                        style={appStyles.nameInput.style}
+                        type="text"
+                        placeholder={t("Name")}
+                      />
+                    </Div>
+                    <Span
+                      title={t(
+                        "This will the name your app, keep it short around 5-10 characters",
+                      )}
+                      style={appStyles.infoIcon.style}
+                    >
+                      <Info color="var(--background)" size={24} />
+                    </Span>
+                  </Label>
+
+                  <Button
+                    disabled={!canAddName}
+                    onClick={() => {
+                      if (canAddName) {
+                        setAppStatus({
+                          currentStep: "add",
+                          part: "highlights",
+                        })
+                      }
+                    }}
+                    style={{
+                      ...utilities.link,
+                      ...utilities.small,
+                      ...(canAddName ? {} : utilities.transparent),
+                    }}
+                    title={t("Continue")}
+                  >
+                    <ArrowRight />
+                  </Button>
+                </Div>
+              </Div>
+            ) : isManagingApp || canEditApp ? (
+              <Div style={appStyles.nameImage.style}>
+                <Button
+                  title={t("Edit")}
+                  onClick={() => {
+                    setAppStatus({
+                      currentStep: "update",
+                      part: "name",
+                    })
+                  }}
+                  style={utilities.link}
+                  className={utilities.link.className}
+                >
+                  <Settings2 />
+                </Button>
+                <A
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                  }}
+                  title={t("Your AI-Powered Life")}
+                  href={`${FRONTEND_URL}/lifeOS`}
+                  className={clsx("button inverted small slideUp")}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setAppStatus({
+                      currentStep: "update",
+                      part: "name",
+                    })
+                  }}
+                >
+                  <Img
+                    showLoading={false}
+                    icon="spaceInvader"
+                    app={app}
+                    size={24}
+                  />
+                  <Span>{appFormWatcher.name}</Span>
+                </A>
+                {isManagingApp && (
+                  <Button
+                    onClick={() => {
+                      setAppStatus(undefined)
+                    }}
+                    className="link"
+                    title={t(isManagingApp ? "Cancel" : "Add agent")}
+                  >
+                    <CircleMinus color="var(--accent-1)" size={24} />
+                  </Button>
+                )}
+              </Div>
+            ) : (
+              store && (
+                <a
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                  }}
+                  title={t(store?.title || "Your AI-Powered Life")}
+                  href={`${FRONTEND_URL}/${store?.slug}`}
+                  className={clsx("button inverted small slideUp")}
+                  onClick={(e) => {
+                    addHapticFeedback()
+
+                    // if (!appFormWatcher.isDefaultValues) {
+                    //   e.preventDefault()
+                    //   setAppStatus({
+                    //     currentStep: "add",
+                    //     part: "highlights",
+                    //   })
+                    //   return
+                    // }
+
+                    if (e.metaKey || e.ctrlKey) {
+                      return
+                    }
+                    e.preventDefault()
+
+                    router.push(`/${store?.slug}`)
+                  }}
+                >
+                  <Img
+                    showLoading={false}
+                    logo="lifeOS"
+                    app={storeApp?.images ? storeApp : undefined}
+                    store={store}
+                    size={24}
+                  />
+                  <span>{store?.name}</span>
+                </a>
+              )
+            )}
+            {!isManagingApp && (
+              <a
+                href={`${FRONTEND_URL}/calendar`}
+                title={t("Organize your life")}
+                onClick={(e) => {
+                  addHapticFeedback()
+
+                  if (e.metaKey || e.ctrlKey) {
+                    return
+                  }
+                  e.preventDefault()
+
+                  router.push("/calendar")
+                }}
+                className={clsx("button transparent slideUp")}
+              >
+                <Img
+                  showLoading={false}
+                  icon="calendar"
+                  width={18}
+                  height={18}
+                />
+              </a>
+            )}
+            {hasHydrated && !canEditApp && !isManagingApp && (
+              <span
+                className={clsx(styles.grip)}
+                title={t("Drag and drop to reorder apps")}
+              >
+                <Grip size={24} color="var(--accent-1)" />
+              </span>
+            )}
+          </Div>
+          {!isManagingApp && (
+            <div className={clsx(styles.section, styles.appsGrid)}>
+              <DraggableAppList className={clsx(styles.apps)}>
+                {appsState.slice(0, 5)?.map((item, index) => {
+                  // Calculate positions for Pacman and Space Invader
+                  // Show after base app (index 0) and Chrry (index 1)
+                  const showPacmanHere =
+                    app?.store?.appId === chrry?.id
+                      ? index === 2
+                      : store?.slug === "deepSeekStore" ||
+                          store?.slug === "claudeStore"
+                        ? index === 2
+                        : index === 3
+                  const showSpaceInvaderHere =
+                    app?.store?.appId === chrry?.id
+                      ? index === 3
+                      : store?.slug === "deepSeekStore" ||
+                          store?.slug === "claudeStore"
+                        ? index === 4
+                        : index === 4
+
+                  return (
+                    <DraggableAppItem
+                      key={item.id}
+                      id={item.id}
+                      index={index}
+                      onMove={reorder.moveApp}
+                      onDragStart={reorder.handleDragStart}
+                      onDragEnd={reorder.handleDragEnd}
+                      onDrop={reorder.handleDrop}
+                      className={clsx(styles.appItem)}
+                      style={{
+                        display: "inline-flex",
+                      }}
+                    >
+                      <>
+                        {item.id === chrry?.id && (
+                          <A
+                            href={getAppSlug(item)}
+                            onClick={(e) => {
+                              if (isManagingApp) {
+                                e.preventDefault()
+                                return
+                              }
+
+                              if (e.metaKey || e.ctrlKey) {
+                                return
+                              }
+                              e.preventDefault()
+
+                              setIsNewChat(true, getAppSlug(item))
+                            }}
+                            className={clsx("link", styles.chrry)}
+                          >
+                            <Img
+                              className={clsx("link", styles.chrry)}
+                              containerClass={clsx("link", styles.chrry)}
+                              logo="chrry"
+                              alt="Chrry"
+                              title={"Chrry"}
+                              width={28}
+                              height={28}
+                            />
+                          </A>
+                        )}
+                        {showPacmanHere && (
+                          <button
+                            onClick={() =>
+                              setAppStatus({
+                                currentStep: "add",
+                                part: "highlights",
+                              })
+                            }
+                            className={clsx("link", styles.pacMan)}
+                          >
+                            <Img
+                              className={clsx("link", styles.pacMan)}
+                              containerClass={clsx("link", styles.pacMan)}
+                              icon="pacman"
+                              alt="Pacman"
+                              title={"Pacman"}
+                              width={26}
+                              height={26}
+                            />
+                          </button>
+                        )}
+                        {slug &&
+                        index ===
+                          appsState.findIndex((a) => getAppSlug(a) === slug) ? (
+                          <>
+                            <StoreApp key={"vex"} />
+                          </>
+                        ) : (
+                          item.id !== chrry?.id &&
+                          item.id !== app?.id && (
+                            <A
+                              key={item.slug}
+                              title={t(item.title)}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.35rem",
+                              }}
+                              href={getAppSlug(item)}
+                              className={clsx(
+                                "button  small",
+                                isManagingApp ? "transparent" : "inverted",
+                              )}
+                              onClick={(e) => {
+                                if (isManagingApp) {
+                                  e.preventDefault()
+                                  return
+                                }
+
+                                addHapticFeedback()
+
+                                if (e.metaKey || e.ctrlKey) {
+                                  return
+                                }
+                                e.preventDefault()
+
+                                // router.push(`/${app.slug}`, { clientOnly: true })
+                              }}
+                            >
+                              <Img
+                                showLoading={false}
+                                app={item}
+                                alt={item.title}
+                                size={24}
+                              />
+                              <span>{item.name}</span>
+                            </A>
+                          )
+                        )}
+                        {showSpaceInvaderHere && (
+                          <button
+                            className={clsx("link", styles.spaceInvader)}
+                            onClick={() =>
+                              setAppStatus({ currentStep: "add", part: "name" })
+                            }
+                          >
+                            <Img
+                              className={clsx("link", styles.spaceInvader)}
+                              containerClass={clsx(styles.spaceInvader)}
+                              icon="spaceInvader"
+                              alt="Space Invader"
+                              title={t("Space Invader")}
+                              width={26}
+                              height={26}
+                            />
+                          </button>
+                        )}
+                      </>
+                    </DraggableAppItem>
+                  )
+                })}
+              </DraggableAppList>
+              {/* <div className={clsx(styles.icons)}>
+                <button
+                  onClick={() =>
+                    setAppStatus({ currentStep: "add", part: "highlights" })
+                  }
+                  className={clsx("link", styles.pacMan)}
+                >
+                  <Img
+                    className={clsx("link", styles.pacMan)}
+                    containerClass={clsx("link", styles.pacMan)}
+                    icon="pacman"
+                    alt="Pacman"
+                    title={t("Pacman")}
+                    width={26}
+                    height={26}
+                  />
+                </button>
+
+                <button
+                  className={clsx("link", styles.spaceInvader)}
+                  onClick={() =>
+                    setAppStatus({ currentStep: "add", part: "name" })
+                  }
+                >
+                  <Img
+                    className={clsx("link", styles.spaceInvader)}
+                    containerClass={clsx(styles.spaceInvader)}
+                    icon="spaceInvader"
+                    alt="Space Invader"
+                    title={t("Space Invader")}
+                    width={26}
+                    height={26}
+                  />
+                </button>
+              </div> */}
+            </div>
+          )}
+        </>
+        <div className={styles.instructions}>
+          {isManagingApp && (
+            <Instructions
+              showButton={true}
+              dataTestId="instruction"
+              opacity={0}
+              onSave={({ content, artifacts }) => {
+                onSave?.({
+                  content,
+                  artifacts,
+                })
+                // !isAddingApp && setInstructionsIndex((prev) => prev + 1)
+              }}
+              showInstructions={false}
+            />
+          )}
+          <Instructions
+            showButton={false}
+            dataTestId="instruction"
+            isAgentBuilder={true}
+            opacity={0}
+          />
+        </div>
+      </Div>
+    </Div>
+  )
+}

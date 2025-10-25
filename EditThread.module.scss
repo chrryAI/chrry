@@ -1,0 +1,51 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.editThreadContainer {
+}
+
+.editThreadInput {
+  width: 100%;
+  height: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: toRem.toRem(7.5);
+  margin-top: toRem.toRem(10);
+}
+
+.modal {
+  width: 100% !important;
+  margin: 0 auto !important;
+  max-width: breakpoints.$breakpoint-mobile !important;
+}
+
+.right {
+  margin-left: auto;
+  display: flex;
+  gap: toRem.toRem(7.5);
+  align-items: center;
+}
+
+.deleteThread {
+  margin-left: auto;
+}
+
+.charLeft,
+.maxCharCount {
+  color: var(--shade-6);
+  font-size: toRem.toRem(12);
+  color: var(--accent-4);
+  font-size: toRem.toRem(11);
+  font-weight: normal;
+
+  &.orange {
+    color: var(--accent-1);
+  }
+
+  &.red {
+    color: var(--accent-0);
+  }
+}

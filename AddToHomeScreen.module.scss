@@ -1,0 +1,126 @@
+@use "./breakpoints.scss";
+@use "./utils.scss";
+
+.addToHomeScreen {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  position: fixed;
+  background: var(--overlay);
+
+  .main {
+    margin: 0 auto;
+    width: auto;
+    padding: 0 10px;
+    z-index: 3;
+    position: relative;
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    @media (min-width: breakpoints.$breakpoint-mobile) {
+      max-width: breakpoints.$breakpoint-mobile;
+      width: inherit;
+    }
+
+    .inner {
+      animation: slideUp 0.4s ease forwards;
+      background-color: var(--background);
+      padding: 20px;
+      border-radius: 20px;
+      border: 1px solid var(--shade-2);
+      position: relative;
+      min-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow);
+
+      @media (min-width: breakpoints.$breakpoint-mobile) {
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      @media (min-width: breakpoints.$breakpoint-mobile) {
+        min-width: 320px;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+
+      .logoContainer {
+        display: inline-flex;
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid var(--shade-2);
+        background-color: var(--background);
+        height: fit-content;
+        width: fit-content;
+      }
+
+      .content {
+        .icon {
+          width: 24px;
+          height: 24px;
+        }
+        > p {
+          margin: 0 0 10px 0;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+        > div {
+          margin: 0 0 10px 0;
+        }
+        .addHomeScreen,
+        .addHomeScreenAndroid,
+        .share {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          border: 1px solid var(--shade-2);
+          background-color: var(--background);
+          margin-top: 10px;
+          border-radius: 10px;
+          width: fit-content;
+          padding: 5px 8px;
+        }
+
+        .addHomeScreenAndroid {
+          margin-top: 0;
+        }
+
+        .selectAddToHomeScreen {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+        .quickAccess {
+          font-size: 14px;
+        }
+        .scrollDown {
+          font-weight: bold;
+        }
+      }
+
+      @include utils.respect-reduced-motion;
+    }
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+}

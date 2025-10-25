@@ -1,0 +1,33 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.testimonials {
+  margin-top: toRem.toRem(15);
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: toRem.toRem(13);
+
+    li:last-child {
+      display: none;
+    }
+
+    @media (min-height: toRem.toRem(740)) {
+      li:last-child {
+        display: block;
+      }
+    }
+  }
+}
+
+.testimonial {
+  margin-bottom: toRem.toRem(10);
+  position: relative;
+
+  .author {
+    color: var(--shade-5);
+    font-size: toRem.toRem(12);
+  }
+}

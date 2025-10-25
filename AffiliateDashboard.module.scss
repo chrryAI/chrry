@@ -1,0 +1,269 @@
+@use "./toRem.scss";
+@use "./breakpoints.scss";
+
+.affiliate {
+  width: 100%;
+  max-width: breakpoints.$breakpoint-tablet;
+  margin: 0 auto;
+  padding: toRem.toRem(5);
+  margin-bottom: toRem.toRem(20);
+
+  .loading {
+    text-align: center;
+    margin-top: toRem.toRem(50);
+  }
+  .dashboard {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h1 {
+        margin-top: toRem.toRem(5);
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: toRem.toRem(10);
+      }
+
+      .status {
+        .statusBadge {
+          padding: toRem.toRem(2) toRem.toRem(8);
+          border-radius: 20px;
+          font-size: toRem.toRem(13);
+          &.active {
+            background: var(--accent-4);
+            color: white;
+          }
+          &.inactive {
+            background: var(--shade-2);
+          }
+        }
+      }
+    }
+
+    .linkSection {
+      margin-bottom: toRem.toRem(30);
+      background: var(--background-secondary);
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .linkBox {
+        display: flex;
+        align-items: center;
+        gap: toRem.toRem(12.5);
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .linkInput {
+          flex: 1;
+        }
+
+        .copyButton {
+        }
+      }
+
+      .linkHelp {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: toRem.toRem(5);
+        color: var(--accent-1);
+        text-align: center;
+      }
+    }
+
+    .payoutSection {
+      text-align: center;
+      margin: toRem.toRem(20) 0;
+      padding: toRem.toRem(20);
+
+      .payoutNote {
+        margin-top: toRem.toRem(10);
+        font-size: toRem.toRem(14);
+        color: var(--text-secondary);
+      }
+
+      .pendingPayoutInfo {
+        padding: toRem.toRem(20);
+        background: var(--shade-1);
+        border: 1px dashed var(--shade-3);
+        border-radius: toRem.toRem(20);
+
+        .pendingBadge {
+          display: inline-flex;
+          align-items: center;
+          gap: toRem.toRem(8);
+          color: var(--shade-0);
+          border-radius: toRem.toRem(20);
+          font-weight: bold;
+          margin-bottom: toRem.toRem(5);
+        }
+
+        .pendingAmount {
+          font-size: toRem.toRem(32);
+          font-weight: bold;
+          color: var(--accent-1);
+        }
+
+        .pendingDate {
+          font-size: toRem.toRem(14);
+          color: var(--text-secondary);
+          margin: toRem.toRem(5) 0;
+        }
+
+        .pendingNote {
+          font-size: toRem.toRem(14);
+          color: var(--text-secondary);
+        }
+      }
+    }
+
+    .statsGrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem.toRem(10);
+      justify-content: center;
+
+      .statCard {
+        padding: toRem.toRem(10);
+        border-radius: toRem.toRem(20);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: toRem.toRem(10);
+        justify-content: center;
+        min-width: toRem.toRem(150);
+        background-color: var(--shade-1);
+
+        transition: transform 0.2s;
+        border: 1px dashed var(--shade-2);
+
+        &:hover {
+          @media (min: breakpoints.$breakpoint-mobile) {
+            transform: translateY(-2px);
+          }
+          border-style: solid;
+          background-color: var(--shade-1);
+        }
+
+        .statIcon {
+          width: 50px;
+          height: 50px;
+          border-radius: 10px;
+          background: var(--primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .statContent {
+          flex: 1;
+          text-align: center;
+
+          .statLabel {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+          }
+
+          .statValue {
+            font-size: 2rem;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .referralsSection {
+      margin-bottom: 3rem;
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        margin: toRem.toRem(20) 0;
+      }
+
+      .referralsGrid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: toRem.toRem(10);
+        justify-content: center;
+
+        .referralStat {
+          padding: toRem.toRem(15);
+          border-radius: toRem.toRem(20);
+          border: 1px dashed var(--shade-2);
+          text-align: center;
+          transition: transform 0.2s;
+          min-width: toRem.toRem(130);
+
+          &:hover {
+            @media (min: breakpoints.$breakpoint-mobile) {
+              transform: translateY(-2px);
+            }
+            border-style: solid;
+            background-color: var(--shade-1);
+          }
+
+          .referralLabel {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+          }
+
+          .referralValue {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+          }
+        }
+      }
+    }
+
+    .info {
+      background: var(--shade-1);
+      padding: toRem.toRem(15);
+      border: 1px solid var(--shade-2);
+      border-radius: toRem.toRem(20);
+
+      h3 {
+        font-size: 1.3rem;
+        margin: 0;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: toRem.toRem(5);
+
+        li {
+          line-height: 1.8;
+
+          strong {
+            color: var(--primary);
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    margin-top: toRem.toRem(20);
+
+    .logo {
+      color: var(--foreground);
+    }
+  }
+  .goToDashboard {
+    margin-top: toRem.toRem(10);
+  }
+}

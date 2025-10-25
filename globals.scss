@@ -1,0 +1,585 @@
+@use "utils.scss";
+@use "breakpoints.scss";
+
+:root {
+  --overlay: rgba(0, 0, 0, 0.1);
+  --foreground: #000;
+  --background: #fff;
+
+  // Theme color palettes - reusable across themes (Tailwind color scale)
+
+  // Red - bold, powerful
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+
+  // Orange - warm, energetic
+  --orange-50: #fff7ed;
+  --orange-100: #ffedd5;
+  --orange-200: #fed7aa;
+  --orange-300: #fdba74;
+  --orange-400: #fb923c;
+  --orange-500: #f97316;
+  --orange-600: #ea580c;
+  --orange-700: #c2410c;
+  --orange-800: #9a3412;
+  --orange-900: #7c2d12;
+
+  // Green - nature, growth
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-300: #86efac;
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-800: #166534;
+  --green-900: #14532d;
+
+  // Blue - professional, calm
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+
+  // Violet - creative, mystical
+  --violet-50: #f5f3ff;
+  --violet-100: #ede9fe;
+  --violet-200: #ddd6fe;
+  --violet-300: #c4b5fd;
+  --violet-400: #a78bfa;
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+  --violet-700: #6d28d9;
+  --violet-800: #5b21b6;
+  --violet-900: #4c1d95;
+
+  // Purple - luxury, innovation
+  --purple-50: #faf5ff;
+  --purple-100: #f3e8ff;
+  --purple-200: #e9d5ff;
+  --purple-300: #d8b4fe;
+  --purple-400: #c084fc;
+  --purple-500: #a855f7;
+  --purple-600: #9333ea;
+  --purple-700: #7e22ce;
+  --purple-800: #6b21a8;
+  --purple-900: #581c87;
+
+  // Default accent colors (legacy)
+  --accent-0: #ef4444; /* red-500 */
+  --accent-1: #f97316; /* orange-500 */
+  --accent-2: #84cc16; /* lime-500 */
+  --accent-3: #22c55e; /* green-500 */
+  --accent-4: #10b981; /* emerald-500 */
+  --accent-5: #06b6d4; /* cyan-500 */
+  --accent-6: #3b82f6; /* blue-500 */
+  --accent-7: #a855f7; /* purple-500 */
+  --accent-8: #ec4899; /* pink-500 */
+
+  --shadow-glow: 0 0 0.9375rem hsl(120 60% 50% / 0.3);
+
+  --shade-1-transparent: rgba(249, 250, 251, 0.9); /* gray-50 with opacity */
+  --shade-2-transparent: rgba(229, 231, 235, 0.8); /* gray-200 with opacity */
+  --shade-3-transparent: rgba(156, 163, 175, 0.8); /* gray-400 with opacity */
+  --background-transparent: rgba(255, 255, 255, 0.8);
+  --shade-1: #f9fafb; /* gray-50 */
+  --shade-2: #e5e7eb; /* gray-200 */
+  --shade-3: #9ca3af; /* gray-400 */
+  --shade-4: #6b7280; /* gray-500 */
+  --shade-5: #4b5563; /* gray-600 */
+  --shade-6: #374151; /* gray-700 */
+  --shade-7: #1f2937; /* gray-800 */
+  --shade-8: #111827; /* gray-900 */
+
+  --number-flow-char-height: 1.875rem;
+
+  --selection: var(--accent-2);
+  --link-color: var(--accent-6);
+
+  --secondary-light: var(--shade-3);
+  --secondary: var(--shade-5);
+  --secondary-dark: var(--shade-7);
+
+  --shadow: 0 0.1875rem 1.5625rem rgba(0, 0, 0, 0.16);
+  --portal-opacity: 0.25;
+  --border-transition: border-color 0.4s ease-in-out;
+  --radius: 1.25rem;
+  --breakpoint-mobile: $breakpoint-mobile;
+  --breakpoint-tablet: $breakpoint-table;
+  --breakpoint-desktop: $breakpoint-desktop;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-mono:
+    Menlo, "Roboto Mono", Monaco, Lucida Console, Liberation Mono,
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+@media print {
+  @page {
+    margin: 0.625rem;
+    size: auto;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html[style*="color-scheme: dark"],
+html.dark {
+  --overlay: rgba(255, 255, 255, 0.1);
+  --foreground: #fff;
+  --background: #000;
+
+  --shade-8: #f9fafb; /* gray-50 (inverted) */
+  --shade-7: #e5e7eb; /* gray-200 (inverted) */
+  --shade-6: #9ca3af; /* gray-400 (inverted) */
+  --shade-5: #6b7280; /* gray-500 (inverted) */
+  --shade-4: #4b5563; /* gray-600 (inverted) */
+  --shade-3: #374151; /* gray-700 (inverted) */
+  --shade-2: #1f2937; /* gray-800 (inverted) */
+  --shade-1: #111827; /* gray-900 (inverted) */
+  --shade-1-transparent: rgba(17, 24, 39, 0.8); /* gray-900 with opacity */
+  --shade-2-transparent: rgba(31, 41, 55, 0.8); /* gray-800 with opacity */
+  --shade-3-transparent: rgba(55, 65, 81, 0.8); /* gray-700 with opacity */
+  --background-transparent: rgba(0, 0, 0, 0.8);
+
+  --selection: var(--accent-7);
+
+  --shadow-glow: 0 0 1.875rem hsl(120 60% 50% / 0.3);
+}
+
+hr {
+  border: 0.0625rem dashed var(--shade-2);
+}
+
+p {
+  margin: 0.15625rem 0;
+}
+
+html,
+body {
+  background-color: var(--background);
+  padding: 0;
+  margin: 0;
+
+  // Color scheme themes (Tailwind-inspired)
+  &.red {
+    // Red theme - bold, powerful
+    --accent-0: var(--red-500);
+    --accent-1: var(--red-400);
+    --accent-2: var(--red-300);
+    --accent-3: var(--red-200);
+  }
+
+  &.orange {
+    // Orange theme - warm, energetic
+    --accent-0: var(--orange-500);
+    --accent-1: var(--orange-400);
+    --accent-2: var(--orange-300);
+    --accent-3: var(--orange-200);
+  }
+
+  &.blue {
+    // Blue theme - professional, calm
+    --accent-0: var(--blue-500);
+    --accent-1: var(--blue-400);
+    --accent-2: var(--blue-300);
+    --accent-3: var(--blue-200);
+    --accent-6: var(--blue-600);
+  }
+
+  &.green {
+    // Green theme - nature, growth
+    --accent-0: var(--green-500);
+    --accent-1: var(--green-400);
+    --accent-2: var(--green-300);
+    --accent-3: var(--green-200);
+  }
+
+  &.violet {
+    // Violet theme - creative, mystical
+    --accent-0: var(--violet-500);
+    --accent-1: var(--violet-400);
+    --accent-2: var(--violet-300);
+    --accent-3: var(--violet-200);
+    --accent-7: var(--violet-600);
+  }
+
+  &.purple {
+    // Purple theme - luxury, innovation
+    --accent-0: var(--purple-500);
+    --accent-1: var(--purple-400);
+    --accent-2: var(--purple-300);
+    --accent-3: var(--purple-200);
+    --accent-8: var(--purple-600);
+  }
+}
+
+body {
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  height: 100dvh;
+  line-height: 1.25;
+  overflow-y: scroll;
+  font-size: 1rem;
+}
+
+a,
+.link {
+  text-decoration: none;
+  color: var(--accent-6);
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+}
+
+a:hover,
+.link:hover,
+a:disabled,
+.link:disabled {
+  text-decoration: none;
+  color: var(--accent-5);
+  background-color: transparent;
+}
+
+a:active,
+.link:active {
+  transform: translateY(0.075rem);
+}
+
+pre,
+code {
+  font-family: var(--font-mono);
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+
+.button,
+button {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--link-color);
+  display: inline-block;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  font-size: 1rem;
+  line-height: 1.15;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+
+  &.small {
+    padding: 0.35rem 0.55rem;
+  }
+  &.xSmall {
+    padding: 0.25rem 0.45rem;
+  }
+
+  &.large {
+    padding: 0.5rem 1.25rem;
+  }
+}
+
+button.transparent,
+.button.transparent {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 0.0625rem solid var(--shade-2);
+  box-shadow: none;
+}
+
+button.transparent:hover,
+.button.transparent:hover {
+  background-color: var(--shade-1) !important;
+  color: var(--foreground) !important;
+}
+
+button.inverted,
+.button.inverted {
+  background-color: var(--foreground);
+  color: var(--background);
+  border: 0.0625rem solid var(--shade-2);
+  box-shadow: none;
+}
+
+button.inverted:hover,
+.button.inverted:hover {
+  background-color: var(--shade-7) !important;
+  color: var(--background) !important;
+}
+
+button[type="submit"] {
+  font-weight: normal;
+}
+
+.button:hover,
+button:hover {
+  background-color: var(--accent-5) !important;
+  color: #fff !important;
+}
+.button:disabled,
+button:disabled {
+  /* opacity: 0.7; */
+  cursor: default;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+.button:active,
+button:active {
+  transform: translateY(0.075rem) !important;
+}
+
+.slideUp {
+  animation: slideUp 0.2s ease;
+}
+
+.row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.3125rem;
+  flex-wrap: wrap;
+}
+
+.column {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3125rem;
+}
+
+.left {
+  margin-right: auto !important;
+}
+
+.right {
+  margin-left: auto !important;
+}
+
+.button.link,
+button.link {
+  text-align: left;
+
+  &:hover {
+    background: none !important;
+    color: var(--accent-5) !important;
+  }
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="time"],
+input[type="url"],
+input[type="search"],
+input[type="datetime-local"],
+input[type="date"],
+textarea {
+  padding: 0.5rem 0.75rem;
+  border: 0.0625rem solid var(--shade-2);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: var(--border-transition);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+
+input[type="number"]:hover,
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="time"]:hover,
+input[type="url"]:hover,
+input[type="search"]:hover,
+input[type="datetime-local"]:hover,
+input[type="date"]:hover,
+textarea:hover {
+  border: 0.0625rem solid var(--shade-3);
+}
+
+textarea {
+  border-style: dashed;
+
+  &:hover {
+    border-style: dashed;
+  }
+}
+
+textarea:focus,
+textarea:active,
+input[type="text"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:active {
+  border-color: var(--link-color);
+  outline: var(--link-color);
+}
+
+.react-select__control.react-select__control--is-focused,
+.react-select__control.react-select__control--menu-is-open,
+.react-select__control.react-select__control--is-focused:hover {
+  border: 0.0625rem solid var(--link-color) !important;
+  box-shadow: none !important;
+}
+.react-select__control:hover {
+  border: 0.0625rem solid var(--shade-3) !important;
+  box-shadow: none !important;
+}
+
+.react-select__option:first-child {
+  margin-top: 0;
+}
+
+.react-select__option:last-child {
+  margin-bottom: 0;
+}
+
+.react-select__clear-indicator,
+.react-select__dropdown-indicator {
+  cursor: pointer;
+}
+
+.react-select__menu {
+  animation: slideDown 0.2s ease forwards;
+  background-color: var(--background);
+  border: 0.0625rem solid var(--shade-2);
+  margin-top: 0;
+  border-radius: var(--radius);
+  @include utils.respect-reduced-motion;
+}
+
+.leaflet-container {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.leaflet-control-zoom {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--shade-2) !important;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background-color: var(--shade-1) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--background);
+  color: var(--foreground);
+  border-radius: var(--radius);
+}
+
+.leaflet-popup-tip {
+  background-color: var(--background);
+}
+
+.leaflet-control-attribution {
+  background-color: rgba(var(--background-rgb), 0.7) !important;
+  color: var(--foreground) !important;
+  font-size: 0.625rem;
+}
+
+.leaflet-control-attribution a {
+  color: var(--link-color) !important;
+}
+
+@media (max-width: 48rem) {
+  .widget-visible iframe[title="chat widget"] {
+    margin-bottom: 3.75rem !important;
+  }
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 99999;
+}
+
+.recharts-default-legend {
+  font-size: 0.8125rem;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.suggestionsList,
+.menuThreadList {
+  opacity: 0;
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1 !important;
+  }
+}
+
+.suggestionItem,
+.menuThreadItem {
+  opacity: 0;
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1 !important;
+  }
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

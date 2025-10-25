@@ -1,0 +1,91 @@
+/* Global utility classes - synced with utils.module.scss */
+
+.link {
+  text-decoration: none;
+  color: var(--accent-6);
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+}
+
+.link:hover {
+  text-decoration: none;
+  color: var(--accent-5);
+  background-color: transparent;
+}
+
+.link:active {
+  transform: translateY(0.075rem);
+}
+
+button.small,
+.button.small {
+  padding: 0.35rem 0.55rem;
+}
+
+button.xSmall,
+.button.xSmall {
+  padding: 0.25rem 0.45rem;
+  font-size: 0.75rem;
+}
+
+button.large,
+.button.large {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+}
+
+button.transparent,
+.button.transparent {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 0.0625rem solid var(--shade-2);
+  box-shadow: none;
+}
+
+button.transparent:hover,
+.button.transparent:hover {
+  background-color: var(--shade-1);
+  color: var(--foreground);
+}
+
+button.inverted,
+.button.inverted {
+  background-color: var(--foreground);
+  color: var(--background);
+  border: 0.0625rem solid var(--shade-2);
+  box-shadow: none;
+}
+
+button.inverted:hover,
+.button.inverted:hover {
+  background-color: var(--shade-7);
+  color: var(--background);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3125rem;
+  flex-wrap: wrap;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+}
+
+.left {
+  margin-right: auto;
+}
+
+.right {
+  margin-left: auto;
+}

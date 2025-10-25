@@ -1,0 +1,41 @@
+@use "utils.scss";
+@use "breakpoints.scss";
+@use "toRem.scss";
+
+.memoryConsent {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(15);
+
+  max-width: toRem.toRem(420);
+  border-radius: var(--radius);
+  font-size: toRem.toRem(15);
+  margin: toRem.toRem(5) auto toRem.toRem(15) auto;
+  animation: slideUp 0.4s ease forwards;
+  position: relative;
+
+  &.manage {
+    border: toRem.toRem(1) solid var(--shade-2);
+    padding: toRem.toRem(10) toRem.toRem(15);
+    background-color: var(--shade-1);
+  }
+}
+
+.options {
+  display: flex;
+  gap: toRem.toRem(10);
+  flex-direction: column;
+  font-size: toRem.toRem(14);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: toRem.toRem(10);
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteButton {
+  border-style: dashed !important;
+}

@@ -1,0 +1,69 @@
+@use "./toRem.scss";
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: toRem.toRem(10);
+}
+
+.splash {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: var(--background);
+  z-index: 999999;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: toRem.toRem(5);
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  gap: toRem.toRem(5);
+}
+
+.brandContainer {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+
+  .brand {
+    font-weight: bold;
+    font-size: toRem.toRem(15);
+  }
+}
+
+.menuButton {
+  display: flex;
+}
+
+.userButton {
+  display: flex;
+}
+
+.contentHelp {
+  font-size: toRem.toRem(26);
+  font-weight: bold;
+  margin: 0;
+  margin-top: toRem.toRem(40);
+  line-height: 1.2;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+}
