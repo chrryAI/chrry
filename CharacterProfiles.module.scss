@@ -1,0 +1,29 @@
+@use "./toRem.scss";
+@use "./utils.scss";
+@use "./breakpoints.scss";
+
+.video {
+  width: toRem.toRem(30);
+  height: toRem.toRem(30);
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.characterProfilesActions {
+  display: flex;
+  margin-top: toRem.toRem(10);
+  align-items: center;
+  justify-content: flex-end;
+  gap: toRem.toRem(7.5);
+}
+
+.characterProfilesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+}
+
+.characterProfileButton {
+  animation: pulse 1s ease-in-out;
+}

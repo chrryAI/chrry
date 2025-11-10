@@ -1,0 +1,26 @@
+@use "./toRem.scss";
+
+.searchBoxWrapper {
+  width: 100%;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: toRem.toRem(12);
+  top: toRem.toRem(12);
+  color: var(--shade-6);
+  width: toRem.toRem(16);
+  height: toRem.toRem(16);
+}
+
+input.search {
+  border: toRem.toRem(1) solid var(--shade-2);
+  border-radius: var(--radius);
+  padding: toRem.toRem(10) toRem.toRem(10) toRem.toRem(10) toRem.toRem(35) !important;
+  width: 100%;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: toRem.toRem(16);
+  transition: var(--border-transition);
+}

@@ -1,0 +1,207 @@
+/* View Transitions API - Optimized for in-page transitions */
+
+/* ============================================
+   DEFAULT: Smooth page transitions
+   Desktop: Slide up/down
+   Mobile: Slide left/right
+   ============================================ */
+
+/* Desktop: Smooth slide-up animation for page changes */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: slide-down;
+}
+
+::view-transition-new(root) {
+  animation-name: slide-up;
+}
+
+/* Mobile: Slide aside (left/right) for more natural mobile feel */
+@media (max-width: 768px) {
+  ::view-transition-old(root) {
+    animation-name: slide-to-left;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: slide-from-right;
+  }
+}
+
+/* ============================================
+   KEYFRAMES - Reusable animations
+   ============================================ */
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes scale-up {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes scale-down {
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-down {
+  to {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   IN-PAGE TRANSITIONS (Always enabled)
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* App image - smooth morph transition */
+  ::view-transition-old(app-image),
+  ::view-transition-new(app-image) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: clip;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(app-image) {
+    animation-name: scale-down;
+  }
+
+  ::view-transition-new(app-image) {
+    animation-name: scale-up;
+  }
+
+  /* App title - smooth slide and fade */
+  ::view-transition-old(app-title),
+  ::view-transition-new(app-title) {
+    animation-duration: 0.35s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(app-title) {
+    animation-name: slide-down;
+  }
+
+  ::view-transition-new(app-title) {
+    animation-name: slide-up;
+  }
+
+  /* Image enlargement - smooth scale transition */
+  ::view-transition-old(image-enlarge),
+  ::view-transition-new(image-enlarge) {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: clip;
+  }
+
+  ::view-transition-old(image-enlarge) {
+    animation-name: scale-down;
+  }
+
+  ::view-transition-new(image-enlarge) {
+    animation-name: scale-up;
+  }
+
+  /* Modal/Dialog transitions */
+  ::view-transition-old(modal),
+  ::view-transition-new(modal) {
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+  }
+
+  ::view-transition-old(modal) {
+    animation-name: fade-out;
+  }
+
+  ::view-transition-new(modal) {
+    animation-name: scale-up;
+  }
+
+  /* Content sections - subtle fade */
+  ::view-transition-old(content-section),
+  ::view-transition-new(content-section) {
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in-out;
+  }
+
+  ::view-transition-old(content-section) {
+    animation-name: fade-out;
+  }
+
+  ::view-transition-new(content-section) {
+    animation-name: fade-in;
+  }
+}
+
+/* ============================================
+   OPTIONAL: Enable full-page transitions
+   Add .page-transitions class to <html> or <body>
+   ============================================ */
+
+.page-transitions {
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.2s;
+      animation-timing-function: ease-in-out;
+    }
+
+    ::view-transition-old(root) {
+      animation-name: fade-out;
+    }
+
+    ::view-transition-new(root) {
+      animation-name: fade-in;
+    }
+
+    /* Main content with page transitions enabled */
+    ::view-transition-old(main-content) {
+      animation: fade-out 0.15s ease-out;
+    }
+
+    ::view-transition-new(main-content) {
+      animation: fade-in 0.2s ease-in;
+    }
+  }
+}

@@ -1,0 +1,129 @@
+@use "./toRem.scss";
+
+.container {
+  display: flex;
+  gap: toRem.toRem(10);
+  font-size: toRem.toRem(14);
+}
+
+.signInButton {
+  display: none;
+
+  @media (min-width: toRem.toRem(800)) {
+    display: flex;
+  }
+}
+
+.video {
+  width: toRem.toRem(30);
+  height: toRem.toRem(30);
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.registerButton {
+  display: flex;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.signInButtons {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 1000;
+}
+
+.switchMode {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: toRem.toRem(5);
+
+  svg {
+    display: flex;
+  }
+}
+
+.googleButton {
+  gap: toRem.toRem(10);
+  border: none;
+}
+
+.modal {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  position: fixed;
+  background: var(--overlay);
+}
+
+.main {
+  margin: 0 auto;
+  width: auto;
+  padding: 0 toRem.toRem(10);
+  z-index: 3;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  width: auto;
+
+  .inner {
+    animation: slideUp 0.4s ease forwards;
+    position: relative;
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    gap: toRem.toRem(20);
+  }
+
+  .appleButton,
+  .googleButton {
+    display: flex;
+    align-items: center;
+    gap: toRem.toRem(5);
+    border-radius: 13px;
+  }
+
+  .close {
+    display: flex;
+    position: absolute;
+    top: toRem.toRem(-40);
+    border: none;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(20)); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}

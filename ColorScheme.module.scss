@@ -1,0 +1,24 @@
+@use "./toRem.scss";
+
+.colorScheme {
+  display: flex;
+  gap: toRem.toRem(5);
+}
+
+.color {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  z-index: 10000;
+
+  position: relative;
+
+  .check {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

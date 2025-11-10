@@ -1,0 +1,65 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.container {
+  max-width: breakpoints.$breakpoint-mobile;
+  margin: 0 auto;
+  flex-direction: column;
+  display: flex;
+  padding: toRem.toRem(40) toRem.toRem(10) toRem.toRem(20) toRem.toRem(10);
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  display: flex;
+  margin-top: toRem.toRem(0);
+}
+
+.links {
+  margin-top: toRem.toRem(10);
+  display: flex;
+  gap: toRem.toRem(25);
+  margin-bottom: toRem.toRem(20);
+}
+
+.link {
+  display: inline-flex;
+}
+
+.features {
+  display: flex;
+
+  flex-direction: column;
+  gap: toRem.toRem(10);
+}
+
+.feature {
+  display: flex;
+  gap: toRem.toRem(10);
+}
+
+.vex {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+  margin-top: toRem.toRem(10);
+  width: 100%;
+}
+
+.featureTitle {
+  margin: 0;
+  margin-bottom: toRem.toRem(5);
+  display: flex;
+  gap: toRem.toRem(2.5);
+}
