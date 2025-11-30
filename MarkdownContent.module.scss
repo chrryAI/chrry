@@ -1,0 +1,161 @@
+@use "./toRem.scss";
+
+.markdownContent {
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+
+  .paragraph {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .codeBlockContainer {
+    margin: 1rem 0;
+    border-radius: 15px;
+    background-color: var(--shade-2);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .codeBlockHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .language {
+    font-size: 0.8rem;
+    color: var(--foreground-secondary);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .copyButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: toRem.toRem(3);
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--accent-1);
+    &:hover {
+      color: var(--accent-1);
+    }
+
+    &.copied {
+      color: var(--accent-4);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .codeBlock {
+    margin: 0 !important;
+    font-size: 0.9rem;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0 !important;
+    border-radius: 0;
+    background-color: #000 !important;
+    border: toRem.toRem(1) solid var(--shade-2);
+    border-radius: 15px;
+    padding: toRem.toRem(7.5) toRem.toRem(5) !important;
+  }
+
+  .inlineCode {
+    background-color: var(--shade-1);
+    padding: toRem.toRem(0.2) toRem.toRem(0.4);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: toRem.toRem(14);
+  }
+
+  .link {
+    color: var(--accent-1);
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .list,
+  .orderedList {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .listItem {
+    margin-bottom: 0.5rem;
+  }
+
+  .heading1,
+  .heading2,
+  .heading3,
+  .heading4 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .heading1 {
+    font-size: 1.5rem;
+  }
+
+  .heading2 {
+    font-size: 1.3rem;
+  }
+
+  .heading3 {
+    font-size: 1.1rem;
+  }
+
+  .heading4 {
+    font-size: 1rem;
+  }
+
+  .blockquote {
+    border-left: toRem.toRem(4) solid var(--accent-2);
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: var(--text-2);
+  }
+
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .tableHead {
+    background-color: var(--shade-2);
+  }
+
+  .tableHeader,
+  .tableCell {
+    border: toRem.toRem(1) solid var(--shade-3);
+    padding: toRem.toRem(0.5);
+    text-align: left;
+  }
+
+  pre {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

@@ -1,0 +1,835 @@
+"use client"
+
+import React, { useEffect, useRef, useState } from "react"
+import {
+  ArrowLeft,
+  AtSign,
+  BellDot,
+  HatGlasses,
+  LoaderCircle,
+  LockOpen,
+  MessageCirclePlus,
+  PanelRight,
+  Search,
+  Tornado,
+  UserLock,
+  UserRoundCog,
+  UserRoundPlus,
+  UsersRound,
+  WannathisIcon,
+} from "./icons"
+import {
+  BrowserInstance,
+  checkIsExtension,
+  FRONTEND_URL,
+  VERSION,
+} from "./utils"
+import { hasThreadNotification } from "./utils/hasThreadNotification"
+import Loading from "./Loading"
+import { useAppContext } from "./context/AppContext"
+import {
+  useAuth,
+  useNavigationContext,
+  useApp,
+  useChat,
+} from "./context/providers"
+import { Button, Div, H4, Span, usePlatform, useTheme } from "./platform"
+import { matchMedia } from "./platform/matchMedia"
+import { animate, stagger } from "motion"
+import { MotiView } from "./platform/MotiView"
+import { useHasHydrated } from "./hooks"
+import Bookmark from "./Bookmark"
+import CollaborationStatus from "./CollaborationStatus"
+import ColorScheme from "./ColorScheme"
+import { defaultLocale } from "./locales"
+import Img from "./Image"
+import EmptyStateTips from "./EmptyStateTips"
+import ThemeSwitcher from "./ThemeSwitcher"
+import { useStyles } from "./context/StylesContext"
+import { useMenuStyles } from "./Menu.styles"
+import A from "./A"
+
+export default function Menu({
+  className,
+  showThreads = true,
+}: {
+  className?: string
+  showThreads?: boolean
+}) {
+  // Split contexts for better organization
+  const { t } = useAppContext()
+
+  // Auth context
+  const {
+    user,
+    guest,
+    profile,
+    track,
+    showFocus,
+    setShowFocus,
+    getAppSlug,
+    loadingAppId,
+    storeApps,
+    setLoadingAppId,
+    hasStoreApps,
+  } = useAuth()
+  // const { utilities } = useStyles()
+
+  const styles = useMenuStyles()
+
+  // Navigation context
+  const {
+    router,
+    threads,
+
+    setIsNewChat,
+    collaborationStatus,
+    setCollaborationStatus,
+    pendingCollaborationThreadsCount,
+    activeCollaborationThreadsCount,
+    isLoadingThreads,
+    refetchThreads,
+    setIsAccountVisible,
+    slug,
+    goToThreads,
+  } = useNavigationContext()
+
+  // App context
+  const { app } = useApp()
+
+  // Platform context
+  const { viewPortHeight, isStandalone } = usePlatform()
+
+  const [loadingThreadId, setLoadingThreadId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!loadingAppId) {
+      setLoadingThreadId(null)
+    }
+  }, [loadingAppId])
+
+  // Theme context
+  const {
+    theme,
+    isDark,
+    addHapticFeedback,
+    reduceMotion: reduceMotionContext,
+    setReduceMotion,
+    isMobileDevice,
+    isDrawerOpen,
+    setIsDrawerOpen,
+    isSmallDevice,
+    colors,
+  } = useTheme()
+
+  const toggleMenu = () => {
+    addHapticFeedback()
+    track({
+      name: "menu-toggle",
+      props: {
+        isDrawerOpen,
+        isSmallDevice,
+      },
+    })
+    setIsDrawerOpen(!isDrawerOpen)
+  }
+
+  const hasHydrated = useHasHydrated()
+
+  const reload = () => {}
+
+  const timelineListRef = useRef<HTMLDivElement>(null)
+
+  // Custom loading state that waits for actual DOM rendering
+
+  const [animationKey, setAnimationKey] = useState(0)
+
+  useEffect(() => {
+    if (!reduceMotionContext) {
+      setAnimationKey((prev) => prev + 1)
+    }
+  }, [reduceMotionContext])
+  // Animation key changes to trigger reanimate
+
+  const innerRef = React.useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && document.addEventListener) {
+      function handleClickOutside(event: MouseEvent) {
+        if (
+          isSmallDevice &&
+          innerRef.current &&
+          !innerRef.current.contains(event.target as Node)
+        ) {
+          setIsDrawerOpen(false)
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [isSmallDevice])
+
+  useEffect(() => {
+    // isDrawerOpen && animateThreads() // Moti handles this declaratively
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsDrawerOpen(!isDrawerOpen)
+      }
+    }
+
+    if (typeof window !== "undefined" && window.addEventListener) {
+      window.addEventListener("keydown", handleKeyDown)
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown)
+      }
+    }
+  }, [isDrawerOpen])
+
+  const [lastStarredId, setLastStarredId] = useState<string | null>(null)
+  const threadRefs = useRef<{ [id: string]: HTMLDivElement | null }>({})
+
+  useEffect(() => {
+    // Function to get or create the meta tag
+    const getOrCreateThemeMetaTag = () => {
+      let meta = document.querySelector(
+        "meta[name='theme-color']",
+      ) as HTMLMetaElement
+      if (!meta) {
+        meta = document.createElement("meta")
+        meta.name = "theme-color"
+        document.head.appendChild(meta)
+      }
+      return meta
+    }
+
+    const getOrCreateBackgroundMetaTag = () => {
+      let meta = document.querySelector(
+        "meta[name='background-color']",
+      ) as HTMLMetaElement
+      if (!meta) {
+        meta = document.createElement("meta")
+        meta.name = "background-color"
+        document.head.appendChild(meta)
+      }
+      return meta
+    }
+
+    const themeMeta = getOrCreateThemeMetaTag()
+    themeMeta.content = isDark ? "#000000" : "#ffffff"
+
+    const backgroundMeta = getOrCreateBackgroundMetaTag()
+    backgroundMeta.content = isDark ? "#000000" : "#ffffff"
+  }, [theme])
+
+  useEffect(() => {
+    if (lastStarredId && threadRefs.current[lastStarredId]) {
+      threadRefs.current[lastStarredId]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      })
+      setLastStarredId(null) // reset after scrolling
+    }
+  }, [threads, lastStarredId])
+
+  return (
+    <>
+      <Div
+        suppressHydrationWarning
+        className="menu blur"
+        key={isDrawerOpen ? "open" : "closed"}
+        ref={innerRef}
+        style={{
+          ...styles.menu.style,
+          ...(isDrawerOpen ? styles.open.style : styles.closed.style),
+        }}
+      >
+        <>
+          <Div style={styles.menuHeader.style}>
+            {isDrawerOpen ? (
+              <>
+                <A
+                  data-testid="menu-home-button"
+                  className={"link"}
+                  href={FRONTEND_URL}
+                  onClick={(e) => {
+                    addHapticFeedback()
+                    track({
+                      name: "home-click",
+                    })
+                    if (e.metaKey || e.ctrlKey) {
+                      return
+                    }
+                    e.preventDefault()
+
+                    isSmallDevice ? toggleMenu() : null
+                    setIsNewChat(true)
+                    reload()
+                  }}
+                >
+                  <Img app={app} size={28} />
+                  <Span style={styles.brand.style}>{app?.name || "Vex"}</Span>
+                </A>
+                <Button
+                  className={"link"}
+                  onClick={toggleMenu}
+                  style={styles.menuButton.style}
+                >
+                  <PanelRight
+                    strokeWidth={1.5}
+                    color="var(--accent-1)"
+                    size={20}
+                  />
+                </Button>
+              </>
+            ) : (
+              <Button
+                suppressHydrationWarning
+                className={"link"}
+                onClick={toggleMenu}
+              >
+                <Img app={app} size={28} />
+              </Button>
+            )}
+          </Div>
+          <Div
+            style={{
+              ...styles.menuContent.style,
+            }}
+          >
+            <Div
+              style={{
+                ...styles.menuItems.style,
+                display: "flex",
+                marginTop: viewPortHeight > 700 ? "1rem" : undefined,
+              }}
+            >
+              <A
+                data-testid="new-chat-button"
+                href={FRONTEND_URL}
+                onClick={(e) => {
+                  track({
+                    name: "new-chat-click",
+                  })
+                  if (e.metaKey || e.ctrlKey) {
+                    return
+                  }
+                  e.preventDefault()
+
+                  showFocus && setShowFocus(false)
+
+                  isSmallDevice ? toggleMenu() : addHapticFeedback()
+                  setIsNewChat(true)
+                  reload()
+                }}
+                style={styles.menuItemButton.style}
+                className="button transparent"
+              >
+                <MessageCirclePlus size={18} /> {t("New chat")}
+              </A>
+              <A
+                href={`${FRONTEND_URL}/?incognito=true`}
+                onClick={(e) => {
+                  track({
+                    name: "private-chat-click",
+                  })
+                  if (e.metaKey || e.ctrlKey) {
+                    return
+                  }
+
+                  showFocus && setShowFocus(false)
+                  e.preventDefault()
+
+                  isSmallDevice ? toggleMenu() : addHapticFeedback()
+                  router.push("/?incognito=true")
+                  reload()
+                }}
+                style={styles.menuItemButton.style}
+                className="button transparent"
+              >
+                <HatGlasses size={18} /> {t("Incognito Chat")}
+              </A>
+              <A
+                href={
+                  isStandalone
+                    ? undefined
+                    : `${app ? getAppSlug(app, "") : ""}/threads`
+                }
+                onClick={(e) => {
+                  track({
+                    name: "threads-click-menu",
+                  })
+                  if (e.metaKey || e.ctrlKey) {
+                    return
+                  }
+                  e.preventDefault()
+
+                  isSmallDevice ? toggleMenu() : addHapticFeedback()
+                  goToThreads()
+                }}
+                style={styles.menuItemButton.style}
+                className="button transparent"
+              >
+                <Search size={18} /> {t("Search chats")}
+              </A>
+              {showThreads && (
+                <Div
+                  style={{
+                    ...styles.threads.style,
+                    ...(isLoadingThreads ? styles.loading.style : {}),
+                  }}
+                >
+                  <H4 style={styles.threadsTitle.style}>
+                    {collaborationStatus === "active" ? (
+                      <>
+                        <UsersRound size={15} color={colors.accent6} />{" "}
+                        {t("Collaborations")}
+                      </>
+                    ) : collaborationStatus === "pending" ? (
+                      <>
+                        <UsersRound size={15} color={colors.accent6} />{" "}
+                        {t("Pending")}
+                      </>
+                    ) : (
+                      <>
+                        {(() => {
+                          if (!hasHydrated) return null
+                          const name = profile?.name || user?.name
+
+                          const isOwner =
+                            user &&
+                            (!profile || profile?.userName === user?.userName)
+
+                          if (isOwner) {
+                            return (
+                              <>
+                                <Button
+                                  className="link"
+                                  style={styles.profileButton.style}
+                                  onClick={() => {
+                                    addHapticFeedback()
+                                    isSmallDevice
+                                      ? toggleMenu()
+                                      : addHapticFeedback()
+                                    setIsAccountVisible(true)
+                                  }}
+                                >
+                                  <UserRoundCog size={18} />{" "}
+                                  <Span
+                                    style={{
+                                      color: isMobileDevice
+                                        ? undefined
+                                        : "var(--foreground)",
+                                    }}
+                                  >
+                                    {name || t("Threads")}
+                                  </Span>
+                                </Button>
+                              </>
+                            )
+                          }
+
+                          return (
+                            <>
+                              <AtSign size={18} /> {name || t("Threads")}
+                            </>
+                          )
+                        })()}
+                      </>
+                    )}
+                    <Div
+                      style={{
+                        marginLeft: "auto",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 7.5,
+                      }}
+                    >
+                      {profile && profile.userName !== user?.userName ? (
+                        <Button
+                          className="link"
+                          onClick={() => {
+                            setIsNewChat(true)
+                          }}
+                        >
+                          <ArrowLeft color={colors.accent6} size={17} />
+                        </Button>
+                      ) : (
+                        <>
+                          {activeCollaborationThreadsCount > 0 ? (
+                            <>
+                              {collaborationStatus === "active" ? (
+                                <Button
+                                  className="link"
+                                  onClick={() => {
+                                    setIsNewChat(true)
+                                  }}
+                                >
+                                  <ArrowLeft color={colors.accent6} size={17} />
+                                </Button>
+                              ) : (
+                                <Button
+                                  title={t("Active Collaborations")}
+                                  className="link"
+                                  onClick={() => {
+                                    addHapticFeedback()
+
+                                    if (guest) {
+                                      router.push("/?signIn=register")
+                                      return
+                                    }
+                                    setCollaborationStatus("active")
+                                  }}
+                                >
+                                  <UsersRound
+                                    color={colors.accent1}
+                                    size={17}
+                                  />
+                                </Button>
+                              )}
+                            </>
+                          ) : null}
+                          {!profile && pendingCollaborationThreadsCount > 0 ? (
+                            collaborationStatus === "pending" ? (
+                              <Button
+                                className="link"
+                                onClick={() => {
+                                  setIsNewChat(true)
+                                }}
+                              >
+                                <ArrowLeft color={colors.accent6} size={16} />
+                              </Button>
+                            ) : (
+                              <Button
+                                title={t("Pending Collaborations")}
+                                className="link"
+                                onClick={() => {
+                                  addHapticFeedback()
+                                  setCollaborationStatus("pending")
+                                }}
+                              >
+                                <UserRoundPlus
+                                  color={colors.accent6}
+                                  size={17}
+                                />
+                              </Button>
+                            )
+                          ) : null}
+                        </>
+                      )}
+                    </Div>
+                  </H4>
+                  {isLoadingThreads ? (
+                    <Div>
+                      <Loading width={20} />
+                    </Div>
+                  ) : (
+                    <>
+                      <Div
+                        ref={timelineListRef}
+                        className="menuThreadList"
+                        style={{
+                          ...styles.threadsList.style,
+                        }}
+                      >
+                        {threads?.threads.map((thread, index) => (
+                          <MotiView
+                            key={`${thread.id}-${thread.bookmarks?.length}-${animationKey}`}
+                            from={{
+                              opacity: 0,
+                              translateY: 0,
+                              translateX: -10,
+                            }}
+                            animate={{
+                              opacity: 1,
+                              translateY: 0,
+                              translateX: 0,
+                            }}
+                            transition={{
+                              type: "timing",
+                              duration: reduceMotionContext ? 0 : 100,
+                              delay: reduceMotionContext ? 0 : index * 50,
+                            }}
+                            data-testid="menu-thread-item"
+                            style={{
+                              ...styles.threadItem.style,
+                              paddingRight:
+                                collaborationStatus === "pending" ? 0 : 17,
+                            }}
+                            ref={(el: any) => {
+                              threadRefs.current[thread.id] = el
+                            }}
+                            className="menuThreadItem"
+                          >
+                            {thread.visibility !== "private" ||
+                            thread.collaborations?.length ? (
+                              <Span
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 5,
+                                  fontSize: 12,
+                                  position: "relative",
+                                  marginRight: 3,
+                                  top: "1px",
+                                }}
+                                title={t(thread.visibility)}
+                              >
+                                {hasThreadNotification({
+                                  thread,
+                                  user,
+                                  guest,
+                                }) ? (
+                                  <BellDot color={colors.accent6} size={13} />
+                                ) : thread.collaborations?.length ? (
+                                  <UsersRound
+                                    color={colors.accent1}
+                                    size={13}
+                                  />
+                                ) : thread.visibility === "public" ? (
+                                  <LockOpen color={colors.accent1} size={13} />
+                                ) : thread.visibility === "protected" ? (
+                                  <UserLock color={colors.accent1} size={13} />
+                                ) : null}
+                              </Span>
+                            ) : null}
+
+                            {(() => {
+                              const url = `/threads/${thread.id}`
+
+                              return (
+                                <A
+                                  className="link"
+                                  data-testid="menu-thread-link"
+                                  style={{
+                                    ...styles.threadItem.style,
+                                  }}
+                                  onClick={(e) => {
+                                    const threadApp = storeApps.find(
+                                      (app) => app.id === thread.appId,
+                                    )
+                                    if (
+                                      thread.appId &&
+                                      (!threadApp || !hasStoreApps(threadApp))
+                                    ) {
+                                      setLoadingThreadId(thread.id)
+                                      setLoadingAppId(thread.appId)
+                                      return
+                                    }
+                                    track({
+                                      name: "thread-click-menu",
+                                      props: {
+                                        threadId: thread.id,
+                                      },
+                                    })
+                                    if (e.metaKey || e.ctrlKey) {
+                                      return
+                                    }
+                                    e.preventDefault()
+                                    isSmallDevice
+                                      ? toggleMenu()
+                                      : addHapticFeedback()
+                                    router.push(url)
+                                  }}
+                                  href={url}
+                                >
+                                  {thread.title}
+                                </A>
+                              )
+                            })()}
+                            {loadingThreadId === thread.id ? (
+                              <Loading
+                                style={{
+                                  ...styles.star.style,
+                                  width: 14,
+                                  height: 14,
+                                }}
+                              />
+                            ) : collaborationStatus === "pending" ? (
+                              <CollaborationStatus
+                                dataTestId="menu"
+                                onSave={() => {
+                                  if (threads.totalCount === 1) {
+                                    setCollaborationStatus(undefined)
+                                  }
+                                  refetchThreads()
+                                }}
+                                style={styles.collaborationStatus.style}
+                                thread={thread}
+                                isIcon
+                              />
+                            ) : (
+                              <Bookmark
+                                dataTestId="menu"
+                                onSave={() => {
+                                  refetchThreads()
+                                }}
+                                style={{
+                                  ...styles.star.style,
+                                  ...(thread.bookmarks?.some(
+                                    (b) => b.userId === thread.userId,
+                                  ) && styles.starActive.style),
+                                }}
+                                thread={thread}
+                              />
+                            )}
+                          </MotiView>
+                        ))}
+                      </Div>
+                      {!threads?.totalCount && (
+                        <>
+                          <Div style={styles.noThreadsContainer.style}>
+                            {t("Nothing here yet")}
+                          </Div>
+                        </>
+                      )}
+                      {threads?.threads.length
+                        ? (() => {
+                            const url = `/threads${collaborationStatus ? `?collaborationStatus=${collaborationStatus}` : ""}`
+
+                            return (
+                              <Div style={styles.loadMoreButtonContainer.style}>
+                                <A
+                                  href={url}
+                                  data-testid="load-more-threads-menu"
+                                  onClick={(e) => {
+                                    addHapticFeedback()
+
+                                    track({
+                                      name: "load-more-threads-menu",
+                                    })
+
+                                    if (e.metaKey || e.ctrlKey) {
+                                      return
+                                    }
+
+                                    e.preventDefault()
+                                    isSmallDevice ? toggleMenu() : null
+                                    collaborationStatus
+                                      ? goToThreads({
+                                          collaborationStatus,
+                                        })
+                                      : goToThreads()
+                                  }}
+                                  className="button transparent small"
+                                  style={styles.loadMoreButton.style}
+                                >
+                                  <LoaderCircle size={14} /> {t("Load more")}
+                                </A>
+                              </Div>
+                            )
+                          })()
+                        : null}
+                      {!threads?.threads?.length ||
+                      threads?.threads?.length < 2 ? (
+                        <EmptyStateTips style={{ marginTop: 15 }} />
+                      ) : null}
+                    </>
+                  )}
+                </Div>
+              )}
+            </Div>
+          </Div>
+          <Div style={styles.footer.style}>
+            <Div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+                fontSize: "0.7rem",
+                color: "var(--shade7)",
+              }}
+            >
+              <Img icon="hamster" showLoading={false} width={26} height={26} />
+              {hasHydrated ? (
+                <Span>
+                  {new Date().getFullYear()}
+                  &#169;
+                </Span>
+              ) : null}
+              <Button
+                style={{
+                  marginLeft: "auto",
+                  gap: 7.5,
+                  color: "#f87171",
+                  fontSize: "0.8rem",
+                }}
+                onClick={() => {
+                  if (checkIsExtension()) {
+                    BrowserInstance?.runtime?.sendMessage({
+                      action: "openInSameTab",
+                      url: `${FRONTEND_URL}/affiliate`,
+                    })
+
+                    isSmallDevice && toggleMenu()
+
+                    return
+                  }
+                  router.push("/affiliate")
+                  isSmallDevice && toggleMenu()
+                }}
+                className={"link"}
+              >
+                {"Amsterdam"}
+                <Img icon="heart" width={22} height={22} />
+              </Button>
+            </Div>
+
+            <Div style={styles.colorSchemeContainer.style}>
+              <ColorScheme style={styles.colorScheme.style} />
+              {hasHydrated && (
+                <Button
+                  title={t("Motion")}
+                  onClick={() => {
+                    setReduceMotion(!reduceMotionContext)
+                  }}
+                  style={{
+                    ...styles.reduceMotionButton.style,
+                    marginLeft: "auto",
+                    color: !reduceMotionContext
+                      ? colors.accent6
+                      : colors.shade3,
+                  }}
+                  className={"link"}
+                >
+                  <Tornado size={18} />
+                  Motion
+                </Button>
+              )}
+            </Div>
+
+            <Div style={styles.bottom.style}>
+              <A
+                openInNewTab
+                href={`https://wannathis.one/?via=iliyan&ref=${app?.slug}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignSelf: "flex-start",
+                  gap: 3,
+                  paddingInline: 8.5,
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button transparent"
+              >
+                <WannathisIcon width={18} height={18} />
+                Wannathis
+              </A>
+
+              <ThemeSwitcher />
+              {hasHydrated && (
+                <Span style={{ marginLeft: "auto", fontSize: 12 }}>
+                  v{VERSION}
+                </Span>
+              )}
+            </Div>
+          </Div>
+        </>
+      </Div>
+    </>
+  )
+}
