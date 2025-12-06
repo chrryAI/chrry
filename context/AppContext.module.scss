@@ -1,0 +1,22 @@
+@use "../toRem.scss";
+
+.video {
+  width: toRem.toRem(30);
+  height: toRem.toRem(30);
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.updateModalButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: toRem.toRem(10);
+}
+
+.updateModalDescription {
+  font-size: toRem.toRem(14);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}

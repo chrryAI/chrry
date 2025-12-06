@@ -1,0 +1,128 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.modal {
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  position: fixed;
+  background: var(--overlay);
+  font-size: toRem.toRem(16);
+}
+
+.video {
+  width: toRem.toRem(35);
+  height: toRem.toRem(35);
+  border-radius: 50%;
+  background-color: black;
+  object-fit: cover;
+}
+
+.main {
+  margin: 0 auto;
+  width: auto;
+  padding: 0 toRem.toRem(10);
+  z-index: 3;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  @media (min-width: toRem.toRem(501)) {
+    max-width: toRem.toRem(500);
+    min-width: toRem.toRem(450);
+    width: auto;
+  }
+
+  &.isDrawerOpen {
+    left: toRem.toRem(125);
+  }
+
+  .inner {
+    animation: slideUp 0.4s ease forwards;
+    background-color: var(--background);
+    padding: toRem.toRem(12.5);
+    border-radius: var(--radius);
+    border: toRem.toRem(1) solid var(--shade-2-transparent);
+    position: relative;
+    max-height: calc(100dvh - 20px);
+    max-width: breakpoints.$breakpoint-desktop;
+    display: flex;
+    flex-direction: column;
+
+    gap: toRem.toRem(5);
+    justify-content: flex-start;
+
+    .header {
+      margin: 0;
+      margin-bottom: toRem.toRem(5);
+      padding: 0;
+      padding-bottom: toRem.toRem(7.5);
+      display: flex;
+      align-items: center;
+      gap: toRem.toRem(10);
+
+      .title {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: toRem.toRem(5);
+      }
+    }
+
+    width: 100%;
+
+    @media (min-width: toRem.toRem(431)) {
+      width: inherit;
+    }
+  }
+
+  .borderHeader {
+    border-bottom: toRem.toRem(1) dashed var(--shade-2);
+  }
+
+  .close {
+    display: flex;
+  }
+
+  .email {
+    margin-bottom: toRem.toRem(5);
+  }
+  .logoutButton {
+    display: flex;
+    align-items: center;
+    gap: toRem.toRem(5);
+    margin-left: auto;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-height: 80dvh;
+  overflow-y: auto;
+
+  &.scrollable {
+    overflow-y: auto;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(20)); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}

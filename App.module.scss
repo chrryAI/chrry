@@ -1,0 +1,334 @@
+@use "./breakpoints.scss";
+@use "./utils.scss";
+@use "./toRem.scss";
+
+.container {
+  display: flex;
+  gap: toRem.toRem(8.5);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  & > div:last-child {
+    margin-top: toRem.toRem(5);
+  }
+}
+
+.title {
+  font-display: swap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: clamp(1.2rem, 4vw, 1.625rem);
+  margin: 0 0 0 0;
+  gap: toRem.toRem(5);
+  margin-bottom: toRem.toRem(7.5);
+  animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.appsGrid {
+  position: relative;
+  width: 100%;
+
+  padding: 0 toRem.toRem(10);
+}
+
+.focusTime {
+  position: absolute;
+  top: toRem.toRem(-5);
+  right: toRem.toRem(-30);
+  padding: toRem.toRem(2) toRem.toRem(6);
+  background-color: var(--accent-1);
+  color: #fff;
+  border-radius: toRem.toRem(10);
+  font-size: toRem.toRem(8.5);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: toRem.toRem(0.5);
+  white-space: nowrap;
+  box-shadow: 0 toRem.toRem(2) toRem.toRem(4) rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.apps {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0 auto;
+  // overflow-wrap: anywhere;
+}
+
+.spaceInvader,
+.atlas {
+  position: relative;
+  margin-left: toRem.toRem(10);
+
+  &.focus {
+    right: toRem.toRem(0);
+  }
+  &.spaceInvader {
+    animation: float 2.5s ease-in-out forwards;
+    @include utils.respect-reduced-motion;
+  }
+}
+
+.focus {
+  position: relative;
+  margin-left: toRem.toRem(5);
+}
+
+.atlas {
+  position: relative;
+  margin-left: toRem.toRem(10);
+  top: toRem.toRem(-5);
+}
+
+.appItem {
+  break-inside: avoid;
+  position: relative;
+  flex: 1;
+  animation: slideUp 0.2s ease;
+  display: inline-flex;
+}
+
+.pacMan {
+  position: relative;
+  bottom: toRem.toRem(0);
+  margin-left: auto !important;
+  margin-right: toRem.toRem(10);
+
+  animation: slideInFromLeft 0.5s ease-out forwards;
+  @include utils.respect-reduced-motion;
+}
+
+.chrry {
+  position: relative;
+  right: toRem.toRem(2.5);
+  margin-left: auto;
+  margin-right: toRem.toRem(7.5);
+}
+
+.popcorn {
+  position: relative;
+  right: toRem.toRem(2.5);
+  margin-left: auto;
+  margin-right: toRem.toRem(7.5);
+}
+
+.zarathustra {
+  position: relative;
+  right: toRem.toRem(5);
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    left: -20px;
+    opacity: 0;
+  }
+  100% {
+    left: -5px;
+    opacity: 1;
+  }
+}
+
+.grip {
+  animation: slideUp 0.2s ease;
+  @include utils.respect-reduced-motion;
+}
+
+.instructions {
+}
+
+.section {
+  display: flex;
+  flex-direction: row;
+  gap: toRem.toRem(10);
+  flex-wrap: wrap;
+
+  &.last {
+    display: none;
+
+    @media (min-height: toRem.toRem(650)) {
+      display: flex;
+    }
+  }
+}
+
+.field {
+  display: flex;
+}
+
+.nameField {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  position: relative;
+  background-color: var(--foreground);
+  color: var(--background);
+  padding: toRem.toRem(2.5) toRem.toRem(12.5);
+  border-radius: toRem.toRem(25);
+
+  .infoIcon {
+    position: relative;
+    top: toRem.toRem(1.5);
+  }
+
+  .nameInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-1);
+    font-size: toRem.toRem(16);
+    padding-left: toRem.toRem(5);
+    width: 100%;
+    max-width: toRem.toRem(100);
+    // padding: toRem.toRem(7.5) inherit;
+
+    &:hover {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.icons {
+}
+
+.titleInput {
+  padding-top: toRem.toRem(11.5) !important;
+  padding-bottom: toRem.toRem(11.5) !important;
+  min-width: toRem.toRem(250) !important;
+  border-radius: toRem.toRem(25) !important;
+  border-style: dashed !important;
+}
+
+.appImage {
+  border-radius: 20%;
+}
+
+.appImageWrapper {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+  position: relative;
+  cursor: pointer;
+}
+
+.editImageButton {
+  padding: toRem.toRem(3) !important;
+  position: absolute;
+  bottom: toRem.toRem(-4);
+  right: toRem.toRem(-5);
+}
+
+.form {
+  display: flex;
+  align-items: center;
+
+  gap: toRem.toRem(7.5);
+}
+
+.formLabel {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.formError {
+  color: var(--accent-0);
+  font-size: toRem.toRem(12);
+}
+.formDiv {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+  gap: toRem.toRem(7.5);
+}
+
+.formInfo {
+  color: var(--shade-7);
+  font-size: toRem.toRem(12);
+
+  position: absolute;
+  top: toRem.toRem(-25);
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+
+  min-width: toRem.toRem(250);
+  transform: translateX(toRem.toRem(-85));
+}
+
+.formInfoError {
+  color: var(--accent-0);
+}
+
+.formDivDiv {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(7.5);
+}
+.namePreview,
+.agentNameForm {
+  margin-bottom: toRem.toRem(3.5);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(7.5);
+}
+
+.appTitle {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(7.5);
+}
+
+.titleFormContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: toRem.toRem(10);
+  position: relative;
+}
+
+.titleFormTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: toRem.toRem(5);
+  position: relative;
+}
+
+.validationFeedback {
+  color: var(--shade-7);
+  font-size: toRem.toRem(12);
+  font-weight: normal;
+  max-width: toRem.toRem(250);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.appImageContainer {
+  position: relative;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: toRem.toRem(-15);
+  left: toRem.toRem(-15);
+}
+
+.nameImage {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(7.5);
+}

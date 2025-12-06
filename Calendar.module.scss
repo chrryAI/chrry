@@ -1,0 +1,824 @@
+// Calendar container
+
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+// React Big Calendar styles are imported in the component
+// This allows us to override them with our custom styles
+
+.calendar {
+  height: 100% !important;
+  width: 100% !important;
+  font-size: toRem.toRem(14);
+  font-family: var(--font-family);
+  max-width: breakpoints.$breakpoint-desktop;
+  margin: 0 auto;
+  margin-top: toRem.toRem(15);
+
+  :global(.rbc-day-bg) {
+    border: 1px solid var(--shade-2) !important;
+    border-bottom: none !important;
+
+    &:not(:last-child) {
+      border-right: none !important;
+    }
+  }
+
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+
+    .loading {
+      position: relative;
+      bottom: toRem.toRem(100);
+    }
+  }
+
+  :global(.rbc-month-row) {
+    // border-bottom: 1px solid var(--shade-2);
+    // min-height: 120px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    :global(.rbc-today) {
+      background-color: var(--foreground) !important;
+    }
+  }
+
+  :global(.rbc-agenda-view table.rbc-agenda-table tbody > tr > td + td),
+  :global(.rbc-agenda-view table.rbc-agenda-table thead > tr > th) {
+    border-left: 1px solid var(--shade-2) !important;
+    border-bottom: 1px solid var(--shade-2) !important;
+  }
+
+  :global(.rbc-agenda-view table) {
+    border: 1px solid var(--shade-2) !important;
+  }
+
+  // Base calendar container
+  :global(.rbc-calendar) {
+    background: var(--background) !important;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 100%;
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.rbc-agenda-table) {
+    tr {
+      background: var(--background) !important;
+    }
+  }
+
+  // Force proper calendar structure
+  :global(.rbc-month-view) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    // Header row with day names
+    :global(.rbc-month-header) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem.toRem(5);
+      background: var(--background-secondary);
+      padding-bottom: 10px;
+
+      :global(.rbc-header) {
+        flex: 1;
+        background: var(--shade-2);
+        border-radius: var(--radius);
+
+        font-weight: 600;
+        padding: toRem.toRem(10) toRem.toRem(12);
+        border: none !important;
+        border-bottom: 1px solid var(--shade-4) !important;
+        text-align: center;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    // Calendar body
+    :global(.rbc-month-body) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .addEventButton {
+    &:hover {
+      svg {
+        color: var(--accent-6);
+      }
+    }
+
+    // flex: 1;
+  }
+
+  .dateButton {
+    padding: toRem.toRem(2);
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: toRem.toRem(24);
+    height: toRem.toRem(24);
+    border: none;
+    font-size: toRem.toRem(14);
+    font-family: var(--font-mono);
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--accent-6);
+    }
+  }
+
+  .dateHeader {
+    display: flex;
+    flex-direction: column;
+    gap: toRem.toRem(5);
+    align-items: space-between;
+    justify-content: space-between;
+    padding: 0 0 0 toRem.toRem(5);
+
+    @media (min-width: breakpoints.$breakpoint-mobile) {
+      flex-direction: row;
+    }
+  }
+
+  :global(.rbc-addons-dnd-row-body) {
+  }
+
+  :global(.rbc-off-range-bg) {
+    background: var(--shade-1) !important;
+  }
+
+  // Ensure proper layout
+  :global(.rbc-month-view),
+  :global(.rbc-time-view),
+  :global(.rbc-agenda-view) {
+    background: var(--background);
+    border: none;
+    border-radius: var(--radius);
+    margin-top: toRem.toRem(10);
+    margin-bottom: toRem.toRem(20);
+    border: 1px solid var(--shade-2) !important;
+    padding: 10px;
+    height: inherit !important;
+    max-width: 100% !important;
+    border-bottom-left-radius: toRem.toRem(10);
+    border-bottom-right-radius: toRem.toRem(10);
+  }
+
+  // Basic row styling
+  :global(.rbc-month-row) {
+    border: 0px solid var(--shade-2) !important;
+    // min-height: 120px;
+  }
+
+  :global(.rbc-month-row:last-child) {
+    border-bottom: 1px solid var(--shade-2) !important;
+  }
+
+  :global(.rbc-row-bg) {
+    // right: 0px !important;
+    // left: 0px !important;
+    // margin-right: 0px !important;
+    // margin-left: 0px !important;
+  }
+
+  // Basic cell styling
+  :global(.rbc-date-cell) {
+    // border-right: 1px solid var(--shade-2);
+    padding-top: toRem.toRem(5);
+    padding-bottom: toRem.toRem(5);
+  }
+
+  // Today highlighting
+
+  :global(.rbc-off-range) {
+    // background: var(--shade-1);
+  }
+
+  :global(.rbc-now) {
+    // background-color: var(--foreground) !important;
+    // color: var(--background) !important;
+
+    :global(.rbc-row) {
+      //   border-right: 10px solid var(--foreground) !important;
+    }
+  }
+
+  :global(.rbc-now .rbc-button-link) {
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+    box-shadow: var(--shadow);
+  }
+
+  // Date numbers
+  :global(.rbc-date-cell > a) {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  // Event styling
+  :global(.rbc-event) {
+    background: var(--shade-4);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: toRem.toRem(7.5) toRem.toRem(12);
+    font-size: 12px;
+    margin: 1px 0;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  :global(.rbc-day-slot .rbc-event) {
+    &.red,
+    &.orange,
+    &.blue,
+    &.green,
+    &.violet,
+    &.purple {
+      // background: var(--shade-2) !important;
+      // border-bottom: 3px solid var(--shade-1) !important;
+      // color: white !important;
+
+      &:active {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // Event content
+  :global(.rbc-event-content) {
+    font-weight: 500;
+  }
+
+  // Show more link
+  :global(.rbc-show-more) {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: toRem.toRem(2);
+
+    &:hover {
+      color: var(--primary-dark);
+    }
+  }
+
+  :global(.rbc-button-link) {
+    padding: toRem.toRem(5);
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Toolbar styles - Essential for navigation
+  :global(.rbc-toolbar) {
+    background: var(--background);
+    padding: 16px;
+    // border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    // Navigation buttons
+    :global(.rbc-btn-group) {
+      display: flex;
+      gap: 4px;
+
+      button {
+        background: var(--background-secondary);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: var(--background-tertiary);
+          border-color: var(--border-hover);
+        }
+
+        &:active {
+          background: var(--primary);
+          color: white;
+        }
+      }
+    }
+
+    // Toolbar label (month/year display)
+    :global(.rbc-toolbar-label) {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 16px;
+    }
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  // Custom toolbar sections
+  .toolbarSection {
+    display: flex;
+    align-items: center;
+    gap: toRem.toRem(5);
+  }
+
+  .toolbarLabel {
+    font-size: toRem.toRem(18);
+    font-weight: bold;
+  }
+
+  // :global(.rbc-label.rbc-time-header-gutter) {
+  //   min-width: 48.9062px;
+  // }
+
+  :global(.rbc-event-content) {
+    padding: toRem.toRem(0) toRem.toRem(3) !important;
+  }
+  // Event styles
+  :global(.rbc-event) {
+    background: var(--primary);
+    border: none;
+    border-radius: toRem.toRem(14) !important;
+    color: white;
+    font-size: toRem.toRem(12);
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+
+    &.red {
+      background: #dd2f2f;
+    }
+    &.orange {
+      background: #f5a623;
+    }
+    &.blue {
+      background: #197ef4;
+    }
+    &.green {
+      background: #58aa11;
+    }
+    &.violet {
+      background: #f832e7;
+    }
+    &.purple {
+      background: #863dcf;
+    }
+
+    // Ensure strong tags inside also truncate
+    strong {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      display: block !important;
+    }
+  }
+
+  // Selected event
+  :global(.rbc-event.rbc-selected) {
+  }
+
+  // Time slots
+  :global(.rbc-time-slot) {
+    border-top: 1px solid var(--shade-2);
+
+    &:hover {
+      background: var(--background-hover);
+    }
+  }
+
+  // Selected time slots
+  :global(.rbc-slot-selected) {
+    background: var(--primary-light) !important;
+    border: 2px solid var(--primary) !important;
+  }
+
+  :global(.rbc-time-content > * + * > *) {
+    border-left: none !important;
+  }
+
+  // Day/Week view styles - Essential for time views
+  :global(.rbc-time-view) {
+    background: var(--background);
+    border: 1px solid var(--border);
+
+    // Time header (days of week)
+    :global(.rbc-time-header) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem.toRem(5);
+      padding-bottom: 10px;
+
+      :global(.rbc-header) {
+        button {
+          box-shadow: none !important;
+
+          &:hover {
+            border: none !important;
+          }
+        }
+      }
+
+      :global(.rbc-header.rbc-today) {
+        button {
+          background-color: var(--accent-6) !important;
+
+          color: white !important;
+        }
+      }
+
+      :global(.rbc-header) {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius);
+
+        font-weight: 600;
+        border: none !important;
+        text-align: center;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    // Time content area
+    :global(.rbc-time-content) {
+      border-top: none;
+      background: var(--background);
+    }
+
+    // Time gutter (hour labels)
+    :global(.rbc-time-gutter) {
+      background: var(--background-secondary);
+      border-right: 1px solid var(--border);
+
+      :global(.rbc-label) {
+        color: var(--text-secondary);
+        font-size: 12px;
+        text-align: right;
+
+        border-radius: toRem.toRem(5);
+        margin-right: toRem.toRem(5);
+      }
+    }
+
+    // Time slot groups
+    :global(.rbc-timeslot-group) {
+      border-bottom: 1px solid var(--shade-3);
+      min-height: 40px;
+    }
+
+    // Individual time slots
+    :global(.rbc-time-slot) {
+      border-top: 1px solid var(--shade-2);
+
+      &:hover {
+        background: var(--background-hover);
+      }
+    }
+
+    // Day columns
+    :global(.rbc-day-slot) {
+      border-left: 1px solid var(--shade-2);
+      background: var(--background);
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+
+    // Current time indicator
+    :global(.rbc-current-time-indicator) {
+      background-color: var(--primary);
+      height: 2px;
+      z-index: 3;
+    }
+  }
+
+  // Month rows - Essential for grid layout
+
+  // Date cells - Essential for grid columns
+  :global(.rbc-date-cell) {
+    // border-right: 1px solid var(--shade-2);
+    position: relative;
+    box-sizing: border-box;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.rbc-off-range {
+      background: var(--background-disabled);
+      color: var(--text-disabled);
+    }
+
+    // Date number
+    > a {
+      color: var(--text-primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  :global(.rbc-time-view .rbc-row) {
+    min-height: initial;
+    display: flex;
+    flex-direction: column;
+    @media (min-width: breakpoints.$breakpoint-mobile) {
+      gap: toRem.toRem(15);
+      flex-direction: row;
+    }
+  }
+
+  :global(.rbc-time-header-cell) {
+    gap: toRem.toRem(10);
+  }
+
+  :global(.rbc-time-header-content) {
+    border: none !important;
+  }
+
+  // Event container within date cell
+  :global(.rbc-row-content) {
+    // border-left: 1px solid var(--shade-2);
+    // border-right: 1px solid var(--shade-2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  // Row segment (each day cell)
+  :global(.rbc-row-segment) {
+    overflow: hidden !important;
+    min-width: 0 !important;
+    container-type: inline-size;
+
+    // Handle the wrapper div that DnD addon adds
+    > div {
+      overflow: hidden !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+
+      > div {
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+    }
+  }
+
+  // Events in month view
+  :global(.rbc-event) {
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 11px;
+    margin: 1px 2px;
+    cursor: pointer;
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: calc(100% - 4px) !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  // DnD resizable wrapper
+  :global(.rbc-addons-dnd-resizable) {
+    overflow: hidden !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+  }
+
+  // Event content
+  :global(.rbc-event-content) {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+
+    // The inner div with the actual text
+    > div {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+    }
+  }
+
+  // Custom "show more" link styling
+  :global(.show-more-link) {
+    display: flex;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+    box-shadow: var(--shadow);
+    padding: toRem.toRem(5) !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: toRem.toRem(2) !important;
+    font-size: toRem.toRem(10) !important;
+  }
+
+  //   // Fix for month view events specifically
+  //   :global(.rbc-month-view .rbc-event) {
+  //     position: relative !important;
+  //     left: 0 !important;
+  //     right: 0 !important;
+  //     width: auto !important;
+  //     max-width: calc(100% - 8px) !important;
+  //     margin: 1px 4px !important;
+  //     box-sizing: border-box !important;
+  //   }
+
+  // Ensure events don't overflow their containers
+  :global(.rbc-row-segment) {
+    position: relative;
+    overflow: hidden;
+  }
+
+  :global(.rbc-event-content) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Show more link
+  :global(.rbc-show-more) {
+    color: var(--primary);
+    font-size: 10px;
+    cursor: pointer;
+    text-align: center;
+    padding: 2px;
+
+    &:hover {
+      color: var(--primary-dark);
+      background: var(--primary-light);
+    }
+  }
+
+  // Agenda view styles
+  :global(.rbc-agenda-view) {
+    table {
+      background: var(--background);
+      border: 1px solid var(--border);
+    }
+
+    .rbc-agenda-date-cell {
+      background: var(--background-secondary);
+      border-right: 1px solid var(--border);
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .rbc-agenda-time-cell {
+      background: var(--background-secondary);
+      border-right: 1px solid var(--border);
+      padding: 12px;
+      font-size: 12px;
+    }
+
+    .rbc-agenda-event-cell {
+      padding: 12px;
+      border-bottom: 1px solid var(--shade-2);
+    }
+  }
+
+  // Today button
+  :global(.rbc-btn-group) {
+    button {
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: none;
+      }
+
+      &:not(:first-child):not(:last-child) {
+        border-radius: 0;
+        border-left: none;
+      }
+    }
+  }
+
+  // Loading state
+  &.loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Drag and Drop styles
+  :global(.rbc-addons-dnd) {
+    .rbc-addons-dnd-drag-preview {
+      background: var(--primary);
+      border: 2px solid var(--primary-dark);
+      border-radius: 4px;
+      opacity: 0.8;
+      transform: rotate(5deg);
+    }
+
+    .rbc-addons-dnd-over {
+      background: var(--primary-light) !important;
+      border: 2px dashed var(--primary) !important;
+    }
+
+    .rbc-addons-dnd-drag-row {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+    }
+
+    .rbc-addons-dnd-resize-ns-anchor {
+      background: var(--primary);
+      border: 1px solid var(--primary-dark);
+    }
+
+    .rbc-addons-dnd-resize-ew-anchor {
+      background: var(--primary);
+      border: 1px solid var(--primary-dark);
+    }
+  }
+
+  // Enhanced selection styles for area selection
+  :global(.rbc-slot-selecting) {
+    background: var(--primary-light) !important;
+    border: 2px solid var(--primary) !important;
+    opacity: 0.7;
+  }
+
+  // Visual feedback during drag operations
+  :global(.rbc-event-dragging) {
+    opacity: 0.5;
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+  }
+
+  // Hover states for better UX
+  :global(.rbc-event:hover) {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+  }
+}
+
+// Custom view buttons
+.viewButtons {
+  display: flex;
+  gap: 4px;
+
+  button {
+    &.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+  }
+}

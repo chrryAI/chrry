@@ -1,0 +1,38 @@
+.emojiContainer {
+  display: flex;
+  gap: 7.5px;
+}
+
+.emoji {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile {
+  display: inline;
+}
+.desktop {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .mobile {
+    display: none;
+  }
+
+  .desktop {
+    display: block;
+  }
+}
+
+.edit {
+}
+
+.children {
+  font-size: 16px;
+  color: var(--foreground);
+}
