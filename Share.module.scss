@@ -1,0 +1,84 @@
+@use "./toRem.scss";
+
+.shareModalInputContainer,
+.collaborateInputContainer {
+  display: flex;
+  gap: toRem.toRem(10);
+}
+
+.shareModalInput,
+.collaborateInput {
+  flex: 1;
+}
+
+.collaborateFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: toRem.toRem(10);
+}
+
+.share {
+  font-size: toRem.toRem(12);
+  position: relative;
+  bottom: toRem.toRem(0.5);
+}
+
+.shareModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+}
+
+.collaboratorEmail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: toRem.toRem(15);
+}
+
+.shareModalDescription {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: toRem.toRem(10);
+}
+
+.collaboratorStatus {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: toRem.toRem(5);
+  svg {
+    position: relative;
+    top: toRem.toRem(1);
+  }
+}
+
+.collaborators {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  font-size: toRem.toRem(14);
+}
+
+.collaborator {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: toRem.toRem(10);
+}
+
+.collaboratorImage {
+  border-radius: 50%;
+}
+
+.collaboratorName {
+  margin-top: 0;
+}
+
+.collaboratorActions {
+  margin-left: auto;
+}
