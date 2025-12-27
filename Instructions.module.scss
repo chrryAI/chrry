@@ -1,0 +1,302 @@
+@use "./breakpoints.scss";
+@use "./utils.scss";
+@use "./toRem.scss";
+
+.instructionsTextarea {
+  min-height: toRem.toRem(200);
+  border-style: dashed;
+  font-size: toRem.toRem(15);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: toRem.toRem(7.5);
+  margin-left: auto;
+}
+
+.modal {
+  width: 100% !important;
+  margin: 0 auto !important;
+  max-width: breakpoints.$breakpoint-mobile !important;
+}
+
+.instructionText {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+}
+
+.updateModalDescription {
+  textarea {
+    width: 100% !important;
+  }
+}
+
+.video {
+  width: toRem.toRem(30);
+  height: toRem.toRem(30);
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.updateModalButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: toRem.toRem(5);
+}
+
+.titleField {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+  margin-bottom: toRem.toRem(10);
+  input {
+    flex: 1;
+  }
+}
+
+.footer {
+  margin-top: toRem.toRem(10);
+
+  display: flex;
+  gap: toRem.toRem(10);
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  font-size: toRem.toRem(14);
+  justify-content: center;
+  align-items: center;
+  gap: toRem.toRem(10);
+  margin: toRem.toRem(10) 0 toRem.toRem(20) 0;
+}
+
+.tip {
+  color: var(--shade-8);
+  font-size: toRem.toRem(14);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  margin-top: toRem.toRem(10);
+}
+
+.charLeft,
+.maxCharCount {
+  color: var(--shade-6);
+  font-size: toRem.toRem(12);
+  color: var(--accent-4);
+  font-size: toRem.toRem(11);
+  font-weight: normal;
+
+  &.orange {
+    color: var(--accent-1);
+  }
+
+  &.red {
+    color: var(--accent-0);
+  }
+}
+
+.right {
+  margin-left: auto;
+  display: flex;
+  gap: toRem.toRem(7.5);
+  align-items: center;
+}
+
+.instructionsContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  gap: toRem.toRem(2.5);
+}
+
+.instructionsButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.instructionsButton {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+
+  &.icon {
+    gap: toRem.toRem(0);
+  }
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(8.5);
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.installAppButton {
+  animation: pulse 1s ease-in-out;
+  @include utils.respect-reduced-motion;
+}
+
+.installButton {
+  animation: pulse 1s ease-in-out;
+  @include utils.respect-reduced-motion;
+}
+
+.instruction {
+  align-items: center;
+  gap: toRem.toRem(5);
+  color: var(--shade-7) !important;
+  font-size: toRem.toRem(14);
+  text-align: center !important;
+  max-width: 100%;
+
+  &.selected {
+    color: var(--accent-6);
+  }
+
+  @media (min-height: toRem.toRem(750)) {
+    @media all and (display-mode: standalone) {
+      display: flex;
+    }
+
+    &.standalone {
+      display: flex;
+    }
+  }
+
+  @media (min-height: breakpoints.$breakpoint-tablet) {
+    display: flex;
+  }
+
+  @media (min-width: breakpoints.$breakpoint-mobile-small) {
+    font-size: toRem.toRem(15);
+  }
+}
+
+.instructionEmoji {
+  flex-shrink: 0;
+}
+
+.instructionTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+// .instructionsList {
+//   opacity: 0;
+
+//   @media (prefers-reduced-motion: reduce) {
+//     opacity: 1 !important;
+//   }
+// }
+
+// .instructionItem {
+//   opacity: 0;
+
+//   @media (prefers-reduced-motion: reduce) {
+//     opacity: 1 !important;
+//   }
+// }
+
+.filePreview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(8);
+  padding: toRem.toRem(8) toRem.toRem(12);
+  background: var(--shade-0);
+  border: toRem.toRem(1) solid var(--shade-2);
+  border-radius: 12.5px;
+  font-size: toRem.toRem(14);
+  color: var(--accent-6);
+}
+
+.filePreviewArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: toRem.toRem(8);
+  padding: toRem.toRem(12);
+  margin-bottom: toRem.toRem(8);
+  background: var(--shade-1);
+  border: toRem.toRem(1) solid var(--shade-2);
+  margin: toRem.toRem(-2.75) toRem.toRem(-10) 0 toRem.toRem(-10);
+  border-radius: toRem.toRem(16);
+  margin: toRem.toRem(12) 0 0 0;
+}
+
+.filePreviewImage {
+  width: toRem.toRem(32);
+  height: toRem.toRem(32);
+  border-radius: 4px;
+  object-fit: cover;
+  background: var(--shade-2);
+}
+
+.fileUploader {
+  display: flex;
+  gap: toRem.toRem(5);
+  margin-top: toRem.toRem(10);
+}
+
+.maxFiles {
+  color: var(--accent-1);
+  font-size: toRem.toRem(12);
+}
+
+.filePreviewIcon {
+  width: toRem.toRem(32);
+  height: toRem.toRem(32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shade-2);
+  border-radius: 4px;
+  color: var(--accent-5);
+}
+
+.filePreviewInfo {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(2);
+}
+
+.filePreviewName {
+  font-weight: 500;
+  font-size: toRem.toRem(13);
+  max-width: toRem.toRem(80);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filePreviewSize {
+  font-size: toRem.toRem(11);
+  color: var(--accent-4);
+}
+
+.filePreviewClear {
+  position: absolute;
+  top: toRem.toRem(-4);
+  right: toRem.toRem(-4);
+  width: toRem.toRem(16);
+  height: toRem.toRem(16);
+  border-radius: 50%;
+  color: var(--accent-0);
+  border: toRem.toRem(2) solid var(--shade-0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}

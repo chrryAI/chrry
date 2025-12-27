@@ -1,0 +1,103 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.threads {
+  width: 100%;
+  max-width: breakpoints.$breakpoint-mobile;
+  margin: toRem.toRem(20) auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  font-size: toRem.toRem(15);
+  margin-top: toRem.toRem(20);
+}
+
+.threadsContainer {
+}
+
+.threadsItem {
+}
+
+.characterProfiles {
+  display: flex;
+  gap: toRem.toRem(5);
+  flex-direction: column;
+  font-size: toRem.toRem(12);
+  align-items: flex-start;
+}
+
+.threadItemTitle {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  margin-bottom: toRem.toRem(5);
+}
+
+.right {
+  display: flex;
+  gap: toRem.toRem(7.5) toRem.toRem(10);
+  margin-left: auto;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.threadItemDate {
+  font-size: toRem.toRem(11);
+  color: var(--shade-6);
+  margin-left: auto;
+}
+
+.searchInput {
+  border: toRem.toRem(1) dashed var(--accent-5) !important;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.threadsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(20);
+  margin-top: toRem.toRem(5);
+}
+
+.threadAiResponse {
+  margin: 0 0;
+  font-size: toRem.toRem(13);
+  color: var(--shade-7);
+}
+
+.threadsTitle {
+  font-size: toRem.toRem(22);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.loadMoreButton {
+  font-size: toRem.toRem(12.5);
+  padding: toRem.toRem(5) toRem.toRem(10);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.loadMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.profileImage {
+  border-radius: 50%;
+}

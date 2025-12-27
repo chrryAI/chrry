@@ -1,0 +1,20 @@
+@use "./toRem.scss";
+
+.enableNotificationsButton {
+  display: inline-flex;
+  align-items: center;
+}
+
+.enableNotifications {
+  display: inline-flex;
+}
+
+.enableNotificationsContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+}
+
+.withoutNotifications {
+  padding-top: 0 !important;
+}

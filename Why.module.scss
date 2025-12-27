@@ -1,0 +1,79 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+@use "./utils.scss";
+
+.desktopOnly {
+  display: none;
+
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    display: flex;
+  }
+}
+
+.why {
+  section {
+    font-size: toRem.toRem(15);
+  }
+}
+
+.mobileOnly {
+  display: flex;
+  flex-direction: column;
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    display: none;
+  }
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(toRem.toRem(250), 1fr));
+  gap: toRem.toRem(20);
+  margin-top: toRem.toRem(20);
+}
+
+.feature {
+  padding: toRem.toRem(20);
+  background: var(--shade-1);
+  border-radius: 8px;
+  border: toRem.toRem(1) solid var(--shade-2);
+}
+
+.comparison {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(12);
+  margin-top: toRem.toRem(20);
+}
+
+.comparisonItem {
+  padding: toRem.toRem(16);
+  background: var(--shade-1);
+  border-radius: 6px;
+  border-left: toRem.toRem(4) solid var(--accent-1);
+}
+
+@media (max-width: breakpoints.$breakpoint-mobile) {
+  .mobileOnly {
+    h3,
+    h4 {
+      font-size: 1.1em;
+    }
+
+    div[style*="display: flex"] {
+      span:first-child {
+        flex: 1;
+        margin-right: toRem.toRem(8);
+      }
+
+      span:last-child {
+        flex-shrink: 0;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .features {
+    grid-template-columns: repeat(auto-fit, minmax(toRem.toRem(250), 1fr));
+    gap: toRem.toRem(20);
+  }
+}
