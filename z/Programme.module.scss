@@ -1,0 +1,168 @@
+/* Zarathustra Landing Page */
+
+.main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.main::selection {
+  background: #fff;
+  color: #000;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 1rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.headline {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  mix-blend-mode: difference;
+  max-width: 20ch;
+}
+
+@media (min-width: 768px) {
+  .headline {
+    font-size: 4.5rem;
+  }
+}
+
+.subheadline {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  color: #9ca3af;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .subheadline {
+    font-size: 1.25rem;
+  }
+}
+
+.ctaWrapper {
+  margin-top: 3rem;
+  pointer-events: auto;
+}
+
+.cta {
+  position: relative;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 0.875rem;
+  overflow: hidden;
+  transition: background 0.3s ease-out, color 0.3s ease-out;
+  border-radius: 2rem;
+}
+
+@media (min-width: 768px) {
+  .cta {
+    font-size: 1rem;
+  }
+}
+
+.cta:hover {
+  background: #fff;
+  color: #000;
+}
+
+.ctaText {
+  position: relative;
+  z-index: 10;
+  letter-spacing: 0.2em;
+}
+
+.ctaHover {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-out;
+  border-radius: 2rem;
+}
+
+.cta:hover .ctaHover {
+  transform: scaleX(1);
+}
+
+.ctaSecondary {
+  background: transparent;
+  color: #9ca3af;
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+
+  position: relative;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 0.875rem;
+  overflow: hidden;
+  transition: background 0.3s ease-out, color 0.3s ease-out;
+  border-radius: 2rem;
+}
+
+.ctaSecondary:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.ctaBack {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-family: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease-out;
+}
+
+.ctaBack:hover {
+  color: #fff;
+}
+
+.footer {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #4b5563;
+}

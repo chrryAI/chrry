@@ -1,0 +1,459 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+@use "./utils.scss";
+
+.userMessageContainer.owner,
+.guestMessageContainer.owner {
+  align-self: flex-end;
+}
+
+.video {
+  width: toRem.toRem(35);
+  height: toRem.toRem(35);
+  border-radius: 50%;
+  background-color: black;
+  object-fit: cover;
+}
+
+.updateModalDescription {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: toRem.toRem(15);
+  font-size: toRem.toRem(14);
+}
+
+.updateModalDescriptionItem {
+  display: flex;
+  gap: toRem.toRem(15);
+  padding-bottom: toRem.toRem(10);
+
+  border: toRem.toRem(1) dashed var(--shade-2);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.appIcon {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: toRem.toRem(12);
+  gap: toRem.toRem(5);
+  font-weight: 500;
+}
+
+.updateModalDescriptionButton {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+  border: toRem.toRem(1) dashed var(--shade-2);
+  border-radius: toRem.toRem(20);
+  padding: toRem.toRem(10);
+  flex: 1;
+}
+
+.thinking {
+  display: flex-end;
+  align-items: center;
+  display: flex;
+  gap: toRem.toRem(5);
+  font-size: toRem.toRem(13);
+  color: var(--shade-7);
+}
+
+.sparklesButton {
+  color: var(--accent-1);
+  animation: pulse 1s ease-in-out;
+  @include utils.respect-reduced-motion;
+}
+
+.userMessageFiles {
+  margin: toRem.toRem(7.5) 0 toRem.toRem(5) 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: toRem.toRem(5);
+}
+
+.playButton {
+  font-size: toRem.toRem(12);
+}
+
+.userMessageImages {
+  margin: toRem.toRem(10) 0 toRem.toRem(5) 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: toRem.toRem(10);
+}
+
+.userMessageImage {
+  border-radius: toRem.toRem(20);
+  max-width: 100%;
+  // height: fit-content;
+  width: toRem.toRem(250);
+}
+
+.userMessageVideo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: toRem.toRem(10);
+
+  margin: toRem.toRem(10) 0 toRem.toRem(5) 0;
+}
+
+.userMessageVideoVideo {
+  max-width: 100%;
+  // height: fit-content;
+  width: toRem.toRem(250);
+  border-radius: toRem.toRem(20);
+}
+
+.userMessageAudio {
+  margin: toRem.toRem(10) 0 toRem.toRem(5) 0;
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+}
+
+.userMessage {
+  display: flex;
+  flex-direction: column;
+  padding: toRem.toRem(10);
+  width: auto;
+  font-size: toRem.toRem(15);
+  min-width: toRem.toRem(200);
+
+  background-color: var(--shade-1);
+  border: toRem.toRem(1) solid var(--shade-2);
+
+  border-radius: var(--radius);
+  padding: toRem.toRem(10);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  box-shadow: 0 0 toRem.toRem(5) var(--shade-2);
+
+  &:not(.android) {
+    animation: slideUp 0.4s ease forwards;
+    @include utils.respect-reduced-motion;
+  }
+
+  &.owner {
+    align-self: flex-end;
+  }
+}
+
+.agentMessageTime,
+.userMessageTime {
+  display: none;
+
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    display: flex;
+  }
+}
+
+.agentMessage {
+  display: flex;
+  flex-direction: column;
+  padding: toRem.toRem(10);
+  width: auto;
+  font-size: toRem.toRem(15);
+  min-width: toRem.toRem(200);
+
+  background-color: var(--shade-1);
+  border: toRem.toRem(1) solid var(--shade-2);
+
+  align-self: flex-start;
+  border-radius: toRem.toRem(15);
+  box-shadow: 0 0 toRem.toRem(5) var(--shade-2);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  &:not(.android) {
+    animation: slideUp 0.4s ease forwards;
+    @include utils.respect-reduced-motion;
+  }
+}
+
+.userImage {
+  border-radius: 50%;
+}
+
+.name {
+  font-size: toRem.toRem(12.5);
+  color: var(--shade-5);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  margin-bottom: toRem.toRem(5);
+}
+
+.agentMessageImages {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: toRem.toRem(5);
+}
+
+.imageContainer {
+  position: relative;
+  display: inline-block;
+
+  &:hover .downloadButton {
+    opacity: 1;
+  }
+}
+
+.downloadButton {
+  position: absolute;
+  top: toRem.toRem(8);
+  right: toRem.toRem(8);
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: toRem.toRem(6);
+  color: white;
+  padding: toRem.toRem(6);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    opacity: 0;
+  }
+}
+
+.agentMessageImages .agentMessageImage,
+.agentMessageImages .placeholder,
+.agentMessageImageContainer,
+.imageContainer {
+  border-radius: toRem.toRem(12.5);
+  width: 100%;
+  height: 100%;
+  min-width: toRem.toRem(300);
+  min-height: toRem.toRem(300);
+  background-color: var(--shade-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: breakpoints.$breakpoint-tablet) {
+    width: toRem.toRem(300) !important;
+    height: toRem.toRem(300) !important;
+  }
+}
+
+.userMessageContent,
+.agentMessageContent {
+  color: var(--shade-7);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageContainer,
+.userMessageContainer {
+  display: flex;
+  gap: toRem.toRem(7.5);
+  align-items: flex-start;
+  flex-direction: column;
+
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    flex-direction: row;
+    gap: toRem.toRem(12.5);
+  }
+}
+
+.agentMessageTime {
+  font-size: toRem.toRem(12);
+  color: var(--shade-6);
+}
+
+.userMessageTime {
+  font-size: toRem.toRem(12);
+  color: var(--shade-6);
+
+  align-self: center;
+}
+
+.footer {
+  display: flex;
+  gap: toRem.toRem(15);
+  align-items: center;
+  margin-top: toRem.toRem(15);
+  font-size: toRem.toRem(12);
+
+  .left {
+    display: flex;
+    gap: toRem.toRem(2);
+    align-items: center;
+    gap: toRem.toRem(8.5);
+  }
+}
+
+.agentWebStreaming {
+  margin-top: toRem.toRem(10);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.likeButtons {
+  display: flex;
+  gap: toRem.toRem(10);
+  margin-left: auto;
+}
+
+.agent {
+  display: flex;
+  align-items: center;
+}
+
+.userIcon,
+.agentIcon {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(7.5);
+  color: var(--accent-1);
+  &.agentIcon {
+    color: var(--accent-6);
+  }
+  &.userIcon.owner {
+    align-self: flex-end;
+  }
+}
+
+.webSearchResults {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+
+  margin-top: toRem.toRem(10);
+
+  flex-wrap: wrap;
+
+  .webSearchResultTitle {
+    font-size: toRem.toRem(13);
+    display: flex;
+    flex-direction: row;
+    gap: toRem.toRem(5);
+  }
+
+  .webSearchResultSnippet {
+    font-size: toRem.toRem(12);
+    color: var(--shade-6);
+  }
+}
+
+.agentMessageContent {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  @media (min-width: breakpoints.$breakpoint-tablet) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: toRem.toRem(20);
+  }
+}
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(8);
+  padding: toRem.toRem(4) toRem.toRem(8);
+  margin: toRem.toRem(4) 0;
+  background: var(--shade-1);
+  border-radius: toRem.toRem(8);
+  font-size: toRem.toRem(12);
+  color: var(--shade-5);
+  border: toRem.toRem(1) solid var(--shade-2);
+}
+
+.typingText {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.dots {
+  display: inline-flex;
+  gap: toRem.toRem(2);
+  align-items: center;
+  vertical-align: middle;
+  margin-left: toRem.toRem(6);
+}
+
+.dotsSpan {
+  width: toRem.toRem(4);
+  height: toRem.toRem(4);
+  background: var(--accent-4);
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.nameWithPresence {
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(6);
+}
+
+.presenceIndicator {
+  width: toRem.toRem(8);
+  height: toRem.toRem(8);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.presenceIndicator.online {
+  background: var(--accent-4);
+}
+
+.presenceIndicator.offline {
+  background: var(--shade-3);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .typingIndicator {
+    background: var(--shade-0);
+    border-color: var(--shade-1);
+  }
+
+  .avatar {
+    background: var(--shade-1);
+  }
+}

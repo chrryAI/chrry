@@ -1,0 +1,348 @@
+import React, { useEffect, useState } from "react"
+import { View, StyleSheet, Dimensions, Text, Animated } from "react-native"
+import {
+  Canvas,
+  Path,
+  Skia,
+  Group,
+  Circle,
+  useFont,
+  LinearGradient,
+  vec,
+} from "@shopify/react-native-skia"
+import { useTheme } from "./context/ThemeContext"
+import { useTranslation } from "react-i18next"
+import { Dataset, DataPoint } from "./utils/chartTypes"
+import { createSmoothPathPoints } from "./utils/chartUtils"
+
+const screenWidth = Dimensions.get("window").width
+
+export interface SkiaLineChartProps {
+  datasets: Dataset[]
+  height: number
+  width?: number
+  yAxisSuffix?: string
+  animated?: boolean
+  animationDuration?: number
+  pointColor?: string
+}
+
+// Helper to generate rainbow colors from base color
+function generateRainbowColorsFromBase(
+  count: number,
+  baseColor: string,
+): string[] {
+  // Simple rainbow generation - you can import from rainbowUtils if it exists
+  const colors = []
+  for (let i = 0; i < count; i++) {
+    const hue = (i / count) * 360
+    colors.push(`hsl(${hue}, 70%, 60%)`)
+  }
+  return colors
+}
+
+const SkiaLineChart: React.FC<SkiaLineChartProps> = ({
+  datasets,
+  height,
+  yAxisSuffix = "",
+  animated = true,
+  animationDuration = 500,
+  pointColor,
+}) => {
+  const width = screenWidth
+  const { t } = useTranslation()
+  const { colors } = useTheme()
+  const styles = getStyles(colors)
+
+  // Early return if no datasets
+  if (!datasets || datasets.length === 0) {
+    return (
+      <View style={[styles.container, { height }]}>
+        <View style={styles.noDataContainer}>
+          <Text style={[styles.noDataText, { color: colors.foreground }]}>
+            {t("Nothing here yet")}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+
+  // Animation progress using simple state
+  const [progressState, setProgressState] = useState(animated ? 0 : 1)
+
+  // Simple animation using useEffect
+  useEffect(() => {
+    if (animated && progressState < 1) {
+      const timer = setTimeout(() => {
+        setProgressState(Math.min(1, progressState + 0.05))
+      }, 20)
+      return () => clearTimeout(timer)
+    }
+  }, [animated, progressState])
+
+  // Find global max value - filter out datasets without data
+  const allValues = datasets
+    .filter((ds) => ds && ds.data && Array.isArray(ds.data))
+    .flatMap((ds) => ds.data.map((d) => d.value))
+  const maxValue = Math.max(...allValues, 0.1) * 1.1
+  const minValue = 0
+
+  // Chart padding
+  const paddingLeft = 0
+  const paddingBottom = 28
+  const chartWidth = width - paddingLeft
+  const chartHeight = height - paddingBottom - 12
+
+  // Create path for dataset
+  const createPath = (data: DataPoint[], progress: number) => {
+    if (data.length < 2) return Skia.Path.Make()
+    const xStep = chartWidth / (data.length - 1)
+    const path = Skia.Path.Make()
+
+    // Convert data to x,y coordinates
+    const points = data.map((d, idx) => {
+      const x = paddingLeft + idx * xStep
+      const normalizedValue = (d.value - minValue) / (maxValue - minValue)
+      const y = paddingBottom + chartHeight - normalizedValue * chartHeight
+      return { x, y }
+    })
+
+    // Use smooth path generation
+    const smoothPoints = createSmoothPathPoints(points, progress)
+
+    smoothPoints.forEach((point, i) => {
+      if (point.type === "move") {
+        path.moveTo(point.x, point.y)
+      } else if (
+        point.type === "cubic" &&
+        point.c1x &&
+        point.c1y &&
+        point.c2x &&
+        point.c2y
+      ) {
+        path.cubicTo(
+          point.c1x,
+          point.c1y,
+          point.c2x,
+          point.c2y,
+          point.x,
+          point.y,
+        )
+      }
+    })
+
+    return path
+  }
+
+  // Trigger animation
+  useEffect(() => {
+    if (animated) {
+      progress.value = 0
+      progress.value = withTiming(1, {
+        duration: animationDuration,
+        easing: Easing.out(Easing.cubic),
+      })
+    } else {
+      progress.value = 1
+    }
+  }, [datasets, animated, animationDuration])
+
+  // Grid lines
+  const renderGridLines = () => {
+    return [0.25, 0.5, 0.75, 1].map((level) => {
+      const y = paddingBottom + chartHeight - chartHeight * level
+      const path = Skia.Path.Make()
+      path.moveTo(paddingLeft, y)
+      path.lineTo(paddingLeft + chartWidth, y)
+      return (
+        <Path
+          key={`grid-${level}`}
+          path={path}
+          style="stroke"
+          strokeWidth={0.5}
+          opacity={progressState}
+          color={colors.shade2}
+        />
+      )
+    })
+  }
+
+  // Render lines
+  const renderLines = () => {
+    return datasets
+      .filter(
+        (dataset) => dataset && dataset.data && Array.isArray(dataset.data),
+      )
+      .map((dataset, i) => {
+        const path = createPath(dataset.data, progressState)
+        const n = dataset.data.length
+        const rainbowColors = generateRainbowColorsFromBase(
+          Math.max(n, 6),
+          dataset.color,
+        )
+        const x0 = paddingLeft
+        const x1 = paddingLeft + chartWidth
+        const y = paddingBottom + chartHeight / 2
+        return (
+          <Path
+            key={`line-${i}`}
+            path={path}
+            style="stroke"
+            strokeWidth={5}
+            strokeJoin="round"
+            strokeCap="round"
+            opacity={progressState}
+          >
+            <LinearGradient
+              start={vec(x0, y)}
+              end={vec(x1, y)}
+              colors={rainbowColors}
+              mode="clamp"
+            />
+          </Path>
+        )
+      })
+  }
+
+  // Render data points
+  const renderDataPoints = () => {
+    return datasets
+      .filter(
+        (dataset) => dataset && dataset.data && Array.isArray(dataset.data),
+      )
+      .map((dataset, i) =>
+        dataset.data.map((point, index) => {
+          const x =
+            paddingLeft + (chartWidth / (dataset.data.length - 1)) * index
+          const normalizedValue =
+            (point.value - minValue) / (maxValue - minValue)
+          const y = paddingBottom + chartHeight - normalizedValue * chartHeight
+
+          return (
+            <Circle
+              key={`point-${i}-${index}`}
+              cx={x}
+              cy={y}
+              r={0}
+              opacity={progressState}
+              color={pointColor ?? dataset.color}
+            />
+          )
+        }),
+      )
+  }
+
+  return (
+    <View style={styles.container}>
+      <View>
+        <Canvas style={{ width, height }}>
+          <Group opacity={progressState}>
+            {renderGridLines()}
+            {renderLines()}
+            {renderDataPoints()}
+          </Group>
+        </Canvas>
+
+        {/* Y-axis labels */}
+        <View style={styles.yAxisLabels}>
+          {[0, 0.25, 0.5, 0.75, 1].map((level) => {
+            const labelValue = (maxValue * level).toFixed(1)
+            return (
+              <Animated.Text
+                key={`label-${level}`}
+                style={[
+                  {
+                    position: "absolute",
+                    left: 2,
+                    top: paddingBottom + chartHeight - chartHeight * level - 8,
+                    color: colors.shade6,
+                    fontSize: 10,
+                    opacity: progressState,
+                    width: paddingLeft - 6,
+                    textAlign: "right",
+                  },
+                ]}
+              >
+                {`${labelValue}${yAxisSuffix}`}
+              </Animated.Text>
+            )
+          })}
+        </View>
+
+        {/* X-axis labels */}
+        <View style={styles.xAxisLabels}>
+          {datasets[0]?.data?.map((point, index) => {
+            const dataLength = datasets[0]?.data?.length || 1
+            const x =
+              paddingLeft + (chartWidth / Math.max(dataLength - 1, 1)) * index
+            return (
+              <Animated.Text
+                key={`x-label-${index}`}
+                style={[
+                  {
+                    position: "absolute",
+                    left: x - 18,
+                    top: height - paddingBottom + 2,
+                    color: colors.shade8,
+                    fontSize: 11,
+                    opacity: progressState,
+                    width: 36,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                {point.label}
+              </Animated.Text>
+            )
+          })}
+        </View>
+      </View>
+
+      {datasets.length === 0 && (
+        <View style={styles.noDataContainer}>
+          <Text style={[styles.noDataText, { color: colors.foreground }]}>
+            {t("Nothing here yet")}
+          </Text>
+        </View>
+      )}
+    </View>
+  )
+}
+
+const getStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      overflow: "hidden",
+      paddingHorizontal: 8,
+      position: "relative",
+    },
+    yAxisLabels: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      height: "100%",
+      width: 30,
+    },
+    xAxisLabels: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      height: 20,
+    },
+    noDataContainer: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    noDataText: {
+      fontSize: 14,
+      fontWeight: "500",
+    },
+  })
+
+export default SkiaLineChart

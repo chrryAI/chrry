@@ -1,0 +1,73 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.focusButton,
+.moodReports {
+  padding-top: 0px;
+
+  &.focusButton {
+    &.hidden {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+      display: none;
+    }
+  }
+}
+
+.top {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 25px;
+  flex: 1;
+  padding: 10px;
+  padding-bottom: 0;
+  z-index: 10;
+  top: 0;
+  button {
+    font-size: 14px;
+  }
+}
+
+.left {
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.right {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

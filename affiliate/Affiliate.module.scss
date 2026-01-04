@@ -1,0 +1,243 @@
+@use "../toRem.scss";
+@use "../breakpoints.scss";
+@use "../utils.scss";
+
+.affiliate {
+  width: 100%;
+  max-width: breakpoints.$breakpoint-tablet;
+  margin: 0 auto;
+  padding: toRem.toRem(5);
+  margin-bottom: toRem.toRem(20);
+}
+
+.loading {
+  text-align: center;
+  margin-top: toRem.toRem(50);
+}
+
+// Marketing Page Styles
+.hero {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: toRem.toRem(4);
+}
+
+.h1 {
+  margin: toRem.toRem(0);
+  color: #f87171;
+}
+
+.subtitle {
+  font-size: toRem.toRem(16);
+  color: var(--text-secondary);
+}
+
+.benefits {
+  margin: toRem.toRem(20) 0 toRem.toRem(10) 0;
+}
+
+.h2 {
+  text-align: center;
+  margin: 0 0 toRem.toRem(30) 0;
+}
+
+.benefitGrid {
+  display: flex;
+  gap: toRem.toRem(10);
+  flex-wrap: wrap;
+  font-size: toRem.toRem(14);
+}
+
+.benefit {
+  flex: 1;
+  text-align: center;
+  border-radius: toRem.toRem(20);
+  border: 1px dashed var(--shade-2);
+  background: var(--shade-1);
+  transition: transform 0.2s;
+  padding: toRem.toRem(15);
+  min-width: toRem.toRem(150);
+  width: 50%;
+
+  @media (max-width: breakpoints.$breakpoint-tablet) {
+    width: 25%;
+  }
+
+  &:hover {
+    @media (min: breakpoints.$breakpoint-mobile) {
+      transform: translateY(-2px);
+    }
+    border-style: solid;
+  }
+
+  svg {
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+.h3 {
+  margin: toRem.toRem(10) 0;
+}
+
+.earnings {
+  margin-bottom: toRem.toRem(20);
+}
+.earningsh2 {
+  text-align: center;
+  margin: toRem.toRem(25) 0;
+  font-size: toRem.toRem(28);
+}
+
+.earningsGrid {
+  display: flex;
+  gap: toRem.toRem(15);
+  flex-wrap: wrap;
+  margin-bottom: toRem.toRem(0);
+  align-items: center;
+  justify-content: center;
+
+  font-size: toRem.toRem(14);
+}
+.earningCard {
+  text-align: center;
+  padding: toRem.toRem(20);
+  border-radius: toRem.toRem(20);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  background-color: var(--shade-1);
+  max-width: 47%;
+
+  &.plus {
+    border: toRem.toRem(2) solid #f87171;
+    .commission {
+      strong {
+        color: #f87171;
+      }
+    }
+  }
+
+  &.pro {
+    border: toRem.toRem(2) solid #f5a623;
+
+    .commission {
+      strong {
+        color: #f5a623;
+      }
+    }
+  }
+
+  &:hover {
+    @media (min: breakpoints.$breakpoint-mobile) {
+      transform: translateY(-2px);
+    }
+  }
+
+  .price {
+  }
+
+  .detail {
+    opacity: 0.9;
+    font-size: 0.9rem;
+  }
+}
+
+.earningCardh3 {
+  margin: toRem.toRem(10) 0;
+  font-size: toRem.toRem(22);
+}
+
+.example {
+  text-align: center;
+  padding: toRem.toRem(10);
+  margin-top: toRem.toRem(10);
+  border-radius: 12px;
+
+  .strong {
+    color: var(--primary);
+  }
+}
+
+.howItWorks {
+  h2 {
+    text-align: center;
+    margin: 0 0 toRem.toRem(20) 0;
+  }
+
+  font-size: toRem.toRem(15);
+
+  .steps {
+    display: flex;
+    gap: toRem.toRem(20);
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    .step {
+      text-align: center;
+      max-width: toRem.toRem(200);
+
+      .stepNumber {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--shade-4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0 auto 1rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+.cta {
+  text-align: center;
+  margin-top: toRem.toRem(20);
+
+  .joinButton {
+    font-weight: bold;
+  }
+
+  .signInNote {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: toRem.toRem(20);
+
+  .logo {
+    color: var(--foreground);
+  }
+}
+.goToDashboard {
+  margin-top: toRem.toRem(10);
+  animation: slideUp 0.4s ease forwards;
+  @include utils.respect-reduced-motion;
+}
