@@ -1,0 +1,98 @@
+@use "./toRem.scss";
+@use "./utils.scss";
+@use "./breakpoints.scss";
+
+.users {
+  width: 100%;
+  max-width: breakpoints.$breakpoint-mobile;
+  margin: 0 auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  font-size: toRem.toRem(15);
+}
+.searchInput {
+  border: toRem.toRem(1) dashed var(--accent-5) !important;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.usersTitle {
+  margin-top: 0;
+  margin-bottom: toRem.toRem(10);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.usersContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.usersItem {
+  display: flex;
+  gap: toRem.toRem(10);
+  flex-direction: column;
+  border-bottom: toRem.toRem(1) dashed var(--shade-2);
+  padding: toRem.toRem(15) 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.profileImage {
+  border-radius: 50%;
+}
+
+.usersItemUserImage {
+  display: flex;
+  gap: toRem.toRem(5);
+  align-items: center;
+}
+
+.usersItemUser {
+  display: flex;
+  gap: toRem.toRem(15);
+  align-items: center;
+}
+
+.usersItemCharacterProfiles {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  align-items: flex-start;
+}
+
+.usersItemCharacterProfile {
+  display: flex;
+  gap: toRem.toRem(5);
+  align-items: center;
+  animation: slideUp 0.1s ease forwards;
+  @include utils.respect-reduced-motion;
+}
+
+.tags {
+  font-size: toRem.toRem(12);
+}
+
+.loadMoreButton {
+  font-size: toRem.toRem(12.5);
+  padding: toRem.toRem(5) toRem.toRem(10);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.loadMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+}

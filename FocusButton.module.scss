@@ -1,0 +1,729 @@
+@use "./breakpoints.scss";
+@use "./utils.scss";
+@use "./toRem.scss";
+
+.main {
+  display: flex;
+  flex-direction: column;
+  max-width: 320px;
+  margin: 0 auto;
+  gap: 15px;
+}
+
+.greeting {
+  font-size: 15px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--shade-6);
+  position: relative;
+  align-self: center;
+  justify-self: center;
+}
+
+.accountLink {
+  font-size: 15px;
+}
+
+.hidden {
+  display: none;
+}
+
+.focusButton {
+  width: 225px;
+  height: 225px;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  border: none;
+  cursor: default;
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--background);
+  border: 1px solid var(--shade-2);
+  color: var(--foreground);
+  transition: var(--border-transition);
+
+  &.mounted {
+    animation: slideUp 0.3s ease-in-out;
+  }
+
+  &.counting {
+    border: 1px solid var(--accent-4);
+    box-shadow: 0 0 toRem.toRem(5) var(--accent-4);
+
+    /* border-color: hsl(120 60% 50%); */
+  }
+
+  &.paused {
+    border: 1px solid var(--orange-500);
+  }
+
+  &.finished {
+    border: 1px solid var(--accent-4);
+    animation: tiltShake 0.5s ease-in-out;
+  }
+}
+
+.pauseButton {
+  border: 1px solid var(--accent-4) !important;
+}
+
+.additionalSettings {
+  display: flex;
+  gap: 10px;
+}
+
+.cookieConsent {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.timeDisplay {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  gap: 8px;
+  position: relative;
+}
+
+.video {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.videoPlay,
+.videoPause {
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.videoContainer {
+  position: relative;
+  background-color: #000;
+  padding: 2px;
+  display: inline-flex;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.letsFocusContainer {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.userName {
+  color: var(--accent-5);
+  position: relative;
+  right: 2px;
+}
+
+.timeAdjust {
+  padding: 5px 9px;
+  color: var(--shade-6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
+  background-color: transparent;
+}
+
+.separator {
+  padding: 0 3px 10px 3px;
+
+  font-family: var(--font-sans);
+}
+
+.controlIcon {
+  display: flex;
+}
+
+.settingsContainer {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px;
+  margin-top: 30px;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.settings {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.settingsInput {
+  border-radius: 10px;
+  border: 1px solid var(--shade-2);
+  padding: 5px 7px;
+  font-size: 1rem;
+  background: var(--background);
+  color: var(--foreground);
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}
+
+.settingsSpan {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  &.visible {
+    display: flex;
+    animation: slideUp 0.3s ease-in-out;
+
+    button {
+      cursor: pointer;
+    }
+  }
+}
+
+.pomodoro {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  gap: 10px;
+
+  button {
+    padding: 5px 10px;
+    font-size: 15px;
+
+    &.active {
+      border-color: var(--accent-4);
+    }
+    &.paused {
+      border-color: var(--accent-1);
+    }
+  }
+
+  // &.visible {
+  //   display: flex;
+  //   animation: slideUp 0.3s ease-in-out;
+
+  //   button {
+  //     cursor: pointer;
+  //   }
+  // }
+
+  // button {
+  //   user-select: none;
+  //   text-decoration: none;
+  //   font-size: 1rem;
+  //   border-radius: 20px;
+  //   background: var(--background);
+  //   color: var(--foreground);
+  //   border: 1px solid var(--shade-2);
+  //   transition: all 0.3s ease;
+  //   box-shadow: none;
+  //   display: flex;
+  //   align-items: center;
+  //   gap: 5px;
+  //   padding: 8px 12px;
+  // }
+
+  // button:hover {
+  //   background: var(--background);
+  //   color: var(--foreground);
+  // }
+}
+
+.testimonials {
+  margin-top: 15px;
+}
+
+.editTaskButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 12px;
+}
+
+.settingsFooter {
+  font-size: 12px;
+  color: var(--shade-6);
+}
+
+.quote {
+  color: var(--shade-7);
+}
+
+.headerContainer {
+  position: absolute;
+  top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.showSettings,
+.replay {
+  cursor: pointer;
+  color: var(--shade-4);
+  padding: 0;
+  background-color: var(--background);
+  border: none;
+  box-shadow: none;
+
+  &:hover {
+    color: var(--shade-4);
+    background-color: var(--background);
+  }
+}
+
+.replay.active {
+  color: var(--accent-4);
+}
+
+.footerContainer {
+  position: absolute;
+
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  // button {
+  //   color: var(--shade-4);
+  //   padding: 0;
+  //   background-color: var(--background);
+  //   border: none;
+  //   box-shadow: none;
+
+  //   &:hover {
+  //     color: var(--shade-4);
+  //     background-color: var(--background);
+  //   }
+
+  //   &.active {
+  //     color: var(--accent-1);
+  //   }
+  // }
+}
+
+.discord,
+.x {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  top: 4px;
+}
+
+.x {
+  top: 1.5px;
+}
+.moon {
+}
+
+.sun {
+  color: var(--accent-1);
+}
+
+.app {
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--shade-7);
+  margin-bottom: 13px;
+
+  margin-top: -5px;
+  gap: 10px;
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.multiTasking {
+  font-size: 15px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--shade-6);
+  margin-bottom: 10px;
+  margin-top: 8px;
+}
+
+.time {
+  min-width: 100px;
+  text-align: center;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.minutes,
+.seconds {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  flex-direction: column;
+  background-color: var(--background);
+}
+
+.controls {
+  gap: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  animation: slideUp 0.3s ease-in-out;
+  button {
+    cursor: pointer;
+  }
+}
+
+.taskSection {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.addTask {
+  margin-bottom: 20px;
+
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.newTaskButton {
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.showDemoButton {
+  font-size: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+  span {
+    color: var(--shade-6);
+  }
+  svg {
+    bottom: 2px;
+  }
+}
+
+.editTask {
+  border: none;
+  padding: 0;
+
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 13px 13px;
+    margin-bottom: 10px;
+  }
+}
+
+.controlIcon {
+  color: var(--shade-5);
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 2px;
+  margin-bottom: 20px;
+
+  > div {
+    cursor: default !important;
+  }
+}
+
+.task {
+  border-radius: var(--radius);
+  border: 1px solid var(--shade-2);
+  padding: 0 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .link {
+    color: var(--foreground);
+  }
+
+  &:hover {
+    border: 1px dashed var(--accent-1);
+  }
+}
+
+.selectedTask {
+  border: 1px solid var(--accent-1);
+
+  &.counting {
+    border: 1px solid var(--accent-4);
+    box-shadow: 0 0 toRem.toRem(5) var(--accent-4);
+  }
+
+  &.paused {
+    border: 1px solid var(--orange-500);
+  }
+
+  &.finished {
+    border: 1px solid var(--accent-4);
+  }
+}
+
+.taskTitle {
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 0;
+}
+
+.editButton {
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  color: var(--foreground);
+  margin-left: auto;
+
+  &:hover {
+    color: var(--shade-6);
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+.taskContent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.addTaskButtons,
+.editTaskButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.loadingTasks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.cancelButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancelEditTaskButton,
+.cancelAddTaskButton,
+.deleteTaskButton,
+.closeSettingsButton,
+.reportsButton {
+  & {
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: none;
+    border: 1px solid var(--shade-2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &:hover {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+.deleteTaskButton {
+  margin-left: auto;
+}
+
+.dragHandle {
+  margin-left: auto;
+  cursor: move;
+}
+
+.fieldError {
+  color: var(--accent-0);
+  font-size: 0.8rem;
+  margin: -5px 0 10px 0;
+}
+
+input {
+  &.inputError,
+  &.inputError:focus {
+    border-color: var(--accent-0);
+  }
+}
+
+.taskTime {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.taskSelected {
+  position: relative;
+  top: 2px;
+}
+
+.taskNotSelected {
+  position: relative;
+  top: 2px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.greatStart {
+  font-size: 13px;
+  padding: 10px;
+  padding-top: 0;
+  position: relative;
+  bottom: 5px;
+  text-align: center;
+  color: var(--shade-7);
+}
+
+.reportsButton {
+  padding: 8px 12px;
+}
+
+@keyframes tiltShake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px); /* Start slightly above */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}

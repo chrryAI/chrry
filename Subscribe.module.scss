@@ -1,0 +1,217 @@
+@use "./toRem.scss";
+@use "./utils.scss";
+
+.subscribeButton {
+  &.isDrawerOpen {
+    position: relative;
+    left: toRem.toRem(125);
+  }
+}
+
+.checkout {
+  display: inline-flex;
+}
+
+.subscribeButton,
+.plusButton {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  background-color: var(--background);
+  border: toRem.toRem(1) solid var(--accent-1) !important;
+  box-shadow: none;
+  padding: toRem.toRem(5) toRem.toRem(10);
+  color: var(--foreground);
+
+  &:hover,
+  &:disabled {
+    background-color: var(--background);
+
+    .svg {
+      stroke: var(--accent-5);
+    }
+
+    color: var(--shade-6);
+  }
+}
+
+.button {
+  display: flex;
+
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: toRem.toRem(10) !important;
+  font-size: toRem.toRem(16) !important;
+}
+
+.plans {
+  margin-bottom: toRem.toRem(7.5);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  position: fixed;
+  background: var(--overlay);
+}
+
+.main {
+  margin: 0 auto;
+  width: auto;
+  padding: 0 toRem.toRem(10);
+  z-index: 3;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  width: auto;
+
+  .inner {
+    animation: slideUp 0.4s ease forwards;
+    background-color: var(--background);
+    padding: toRem.toRem(20);
+    padding-top: toRem.toRem(10);
+    border-radius: var(--radius);
+    border: toRem.toRem(1) solid var(--shade-2);
+    position: relative;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    gap: toRem.toRem(5);
+    justify-content: flex-start;
+
+    .title {
+      margin: 0;
+      margin-bottom: toRem.toRem(5);
+      border-bottom: toRem.toRem(1) solid var(--shade-2);
+      padding: 0;
+      padding-bottom: toRem.toRem(5);
+      display: flex;
+      align-items: center;
+      gap: toRem.toRem(5);
+    }
+  }
+
+  .close {
+    margin-left: auto;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(20)); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+  list-style-type: none;
+  margin: 0;
+  font-size: toRem.toRem(15);
+  padding: 0;
+
+  .feature {
+    margin: 0;
+    display: flex;
+
+    gap: toRem.toRem(1);
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.checkoutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: toRem.toRem(5);
+  font-size: toRem.toRem(16);
+  background-color: var(--accent-4);
+}
+
+.userToGift {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(10);
+  margin-bottom: toRem.toRem(10);
+}
+
+.gift {
+  margin-top: toRem.toRem(10);
+}
+
+.invite {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.userToGiftName {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+
+  .backButton {
+    margin-left: auto;
+  }
+}
+
+.inviteInput {
+  flex: 1;
+}
+
+.subscribeAsGuest {
+  font-size: toRem.toRem(14);
+  text-align: center;
+  margin-top: toRem.toRem(15);
+  margin-bottom: toRem.toRem(3);
+  color: var(--shade-7);
+
+  p {
+    font-size: toRem.toRem(12);
+  }
+}
+
+.giftButton,
+.currentPlanButton,
+.cancelSubscriptionButton {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  font-size: toRem.toRem(16);
+  width: 100%;
+  padding: toRem.toRem(10);
+}
+
+.checkoutButtonContainer {
+  display: flex;
+  gap: toRem.toRem(8.5);
+  flex-direction: column;
+  margin-top: toRem.toRem(8.5);
+}

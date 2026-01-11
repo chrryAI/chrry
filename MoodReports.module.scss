@@ -1,0 +1,172 @@
+@use "./toRem.scss";
+
+.moodReports {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 320px;
+  padding: 0 20px 200px 20px;
+
+  animation: slideUp 0.3s ease-in-out;
+
+  margin: 0 auto;
+  max-width: 500px;
+
+  font-size: toRem.toRem(13);
+
+  @media (min-width: 800px) {
+    min-width: 500px;
+  }
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+  margin-bottom: 15px;
+
+  align-items: center;
+
+  .close,
+  .toggleDemo {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+  }
+
+  .toggleDemo {
+    font-size: 12px;
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 130px;
+}
+
+.demo {
+  font-size: 11px;
+  position: relative;
+  top: 2px;
+  left: 4px;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  margin-top: 15px;
+  justify-content: flex-end;
+  margin-right: 10px;
+
+  .link {
+    display: inline-flex;
+  }
+
+  > span {
+    font-size: 13px;
+  }
+
+  @media (min-width: 600px) {
+    font-size: 16px;
+
+    > span {
+      font-size: 13px;
+    }
+  }
+}
+
+.cookieConsent {
+  margin: 0px 0 20px 0;
+
+  @media (min-width: 600px) {
+    margin-top: 40px;
+  }
+
+  @media (min-width: 800px) {
+    margin-top: 0px;
+  }
+}
+
+.dailyMoods {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+.next,
+.previous {
+  display: inline-flex;
+}
+
+.next:disabled {
+  color: var(--shade-4);
+}
+
+.dayMood {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dayName {
+  font-size: 13px;
+  color: var(--shade-6);
+}
+
+.moodEmoji {
+  font-size: 18px;
+
+  @media (min-width: 340px) {
+    font-size: 26px;
+  }
+
+  @media (min-width: 360px) {
+    font-size: 31px;
+  }
+
+  @media (min-width: 450px) {
+    font-size: 42px;
+  }
+
+  @media (min-width: 600px) {
+    font-size: 48px;
+  }
+
+  &.windows {
+    @media (min-width: 340px) {
+      font-size: 16px;
+    }
+
+    @media (min-width: 360px) {
+      font-size: 21px;
+    }
+
+    @media (min-width: 450px) {
+      font-size: 32px;
+    }
+
+    @media (min-width: 600px) {
+      font-size: 38px;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}
