@@ -1,0 +1,118 @@
+@use "./toRem.scss";
+
+// Utility classes for cross-platform styling
+.button {
+  padding: toRem.toRem(8) toRem.toRem(12);
+  background-color: var(--link-color);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  font-size: toRem.toRem(14);
+  line-height: 1.15;
+
+  &:hover {
+    background-color: var(--accent-5);
+    color: #fff;
+  }
+
+  &:active {
+    transform: translateY(toRem.toRem(1.2));
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+.link {
+  text-decoration: none;
+  color: var(--accent-6);
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+
+  &:hover {
+    text-decoration: none;
+    color: var(--accent-5);
+    background-color: transparent;
+  }
+
+  &:active {
+    transform: translateY(toRem.toRem(1.2));
+  }
+}
+
+.small {
+  padding: toRem.toRem(5.6) toRem.toRem(8.8);
+  font-size: toRem.toRem(14);
+}
+
+.xSmall {
+  padding: toRem.toRem(4) toRem.toRem(7.2);
+  font-size: toRem.toRem(12);
+}
+
+.large {
+  padding: toRem.toRem(8) toRem.toRem(20);
+  font-size: toRem.toRem(16);
+}
+
+.transparent {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: toRem.toRem(1) solid var(--shade-2);
+  box-shadow: none;
+
+  &:hover {
+    background-color: var(--shade-1);
+    color: var(--foreground);
+  }
+}
+
+.inverted {
+  background-color: var(--foreground);
+  color: var(--background);
+  border: toRem.toRem(1) solid var(--shade-2);
+  box-shadow: none;
+
+  &:hover {
+    background-color: var(--shade-7);
+    color: var(--background);
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: toRem.toRem(5);
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+  flex: 1;
+}
+
+.left {
+  margin-right: auto;
+}
+
+.right {
+  margin-left: auto;
+}

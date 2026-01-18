@@ -1,0 +1,236 @@
+@use "../toRem.scss";
+@use "../breakpoints.scss";
+@use "../utils.scss";
+
+// Test all features of the SCSS to TypeScript converter
+
+// 1. Basic styles with all property types
+.container {
+  // Layout
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: toRem.toRem(10);
+  
+  // Sizing
+  width: 100%;
+  max-width: toRem.toRem(500);
+  min-height: toRem.toRem(200);
+  padding: toRem.toRem(16);
+  margin: 0 auto;
+  
+  // Colors
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--shade-2);
+  
+  // Border & radius
+  border-radius: toRem.toRem(20);
+  
+  // Position
+  position: relative;
+  overflow: hidden;
+}
+
+// 2. Interactive states (hover, active, focus, disabled)
+.button {
+  // Base styles
+  padding: toRem.toRem(8) toRem.toRem(16);
+  background-color: var(--accent-6);
+  color: #fff;
+  border: none;
+  border-radius: toRem.toRem(20);
+  cursor: pointer;
+  font-size: toRem.toRem(14);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  
+  // Hover state
+  &:hover {
+    background-color: var(--accent-5);
+    transform: translateY(-1px);
+  }
+  
+  // Active state
+  &:active {
+    transform: translateY(1px);
+  }
+  
+  // Focus state
+  &:focus {
+    outline: 2px solid var(--accent-6);
+    outline-offset: 2px;
+  }
+  
+  // Disabled state
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--shade-2);
+  }
+}
+
+// 3. Link with interactive states
+.link {
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: toRem.toRem(3);
+  
+  &:hover {
+    color: var(--accent-5);
+    text-decoration: underline;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// 4. Complex layout with flexbox
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(12);
+  padding: toRem.toRem(20);
+  background-color: var(--background);
+  border: 1px solid var(--shade-2);
+  border-radius: toRem.toRem(16);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// 5. Text styles
+.title {
+  font-size: 4vw; // Responsive font size
+  font-weight: bold;
+  color: var(--foreground);
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: toRem.toRem(16);
+  color: var(--shade-5);
+  text-align: center;
+  margin: toRem.toRem(8) 0;
+}
+
+// 6. Input styles
+.input {
+  padding: toRem.toRem(10) toRem.toRem(14);
+  border: 1px solid var(--shade-2);
+  border-radius: toRem.toRem(8);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: toRem.toRem(14);
+  width: 100%;
+  
+  &:hover {
+    border-color: var(--shade-3);
+  }
+  
+  &:focus {
+    border-color: var(--accent-6);
+    outline: none;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--shade-1);
+  }
+}
+
+// 7. Grid layout
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: toRem.toRem(16);
+  justify-content: center;
+}
+
+// 8. Absolute positioning
+.badge {
+  position: absolute;
+  top: toRem.toRem(-8);
+  right: toRem.toRem(-8);
+  background-color: var(--accent-0);
+  color: #fff;
+  border-radius: 50%;
+  width: toRem.toRem(24);
+  height: toRem.toRem(24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: toRem.toRem(12);
+  font-weight: bold;
+}
+
+// 9. Nested structure (should be flattened)
+.parent {
+  padding: toRem.toRem(16);
+  
+  // This should be ignored or handled separately
+  .child {
+    margin: toRem.toRem(8);
+  }
+}
+
+// 10. All CSS variable types
+.themeTest {
+  // Colors
+  color: var(--foreground);
+  background-color: var(--background);
+  border-color: var(--shade-2);
+  
+  // Accent colors
+  --test-accent-0: var(--accent-0);
+  --test-accent-6: var(--accent-6);
+  
+  // Shades
+  --test-shade-1: var(--shade-1);
+  --test-shade-7: var(--shade-7);
+  
+  // Special
+  box-shadow: var(--shadow);
+}
+
+// 11. Nested modifiers with &.className (should create unique names)
+.main {
+  padding: toRem.toRem(10);
+  padding-top: toRem.toRem(50);
+  display: flex;
+  flex-direction: column;
+  
+  &.empty {
+    padding-top: 0;
+  }
+  
+  &.fullscreen {
+    padding: 0;
+    height: 100vh;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  padding: toRem.toRem(10);
+  
+  &.empty {
+    position: static;
+    margin: 0;
+  }
+  
+  &.transparent {
+    background-color: transparent;
+  }
+}
