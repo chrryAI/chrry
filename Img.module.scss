@@ -1,0 +1,48 @@
+@use "breakpoints";
+@use "utils";
+@use "toRem";
+
+.errorMessage {
+  padding: 0;
+  font-size: toRem.toRem(12);
+  flex-grow: 0;
+  flex-shrink: 0;
+  @media (max-width: (breakpoints.$breakpoint-mobile-max)) {
+    width: 100% !important;
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingPlaceholder {
+  display: flex;
+  min-height: toRem.toRem(200);
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.img {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  animation: slideUp 0.1s ease forwards;
+  @include utils.respect-reduced-motion;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(15)); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at original position */
+  }
+}

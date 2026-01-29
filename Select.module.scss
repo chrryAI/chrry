@@ -1,0 +1,31 @@
+@use "./toRem.scss";
+
+.customSelect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0.5rem 2.5rem 0.5rem 0.5rem;
+  border: toRem.toRem(1) dashed var(--accent-1);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: var(--border-transition);
+  cursor: pointer;
+
+  &:focus,
+  &:hover,
+  &:active {
+    border-color: var(--link-color);
+    outline: var(--link-color);
+  }
+}
+.icon {
+  position: absolute;
+  right: toRem.toRem(7.5);
+  pointer-events: none;
+}
