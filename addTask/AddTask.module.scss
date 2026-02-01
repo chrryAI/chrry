@@ -1,0 +1,53 @@
+.addTask {
+  margin: 5px 0 20px 0;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.addTaskButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.addTaskMaxCountReached {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground);
+  gap: 15px;
+  flex-direction: column;
+}
+
+.addTaskMaxCountReachedText {
+  color: var(--shade-6);
+  font-size: 15px;
+}
+
+.addTaskTitle {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.fieldError {
+  color: var(--accent-0);
+  font-size: 13px;
+
+  margin-bottom: 15px;
+}
+
+.inputError {
+  border-color: var(--accent-0);
+}
