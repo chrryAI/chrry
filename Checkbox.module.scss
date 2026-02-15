@@ -1,0 +1,43 @@
+@use "toRem.scss";
+
+.formSwitch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: toRem.toRem(5);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.formSwitchTrack {
+  position: relative;
+  display: inline-block;
+  width: toRem.toRem(46);
+  height: toRem.toRem(26);
+  background-color: var(--shade-2);
+  border-radius: toRem.toRem(23);
+  transition: all 0.3s linear;
+}
+
+.formSwitchTrackChecked {
+  background-color: var(--link-color);
+}
+
+.formSwitchThumb {
+  position: absolute;
+  left: toRem.toRem(2);
+  top: toRem.toRem(2);
+  width: toRem.toRem(22);
+  height: toRem.toRem(22);
+  background-color: #fff;
+  border-radius: toRem.toRem(11);
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease-in-out;
+}
+
+.formSwitchThumbChecked {
+  transform: translateX(toRem.toRem(20));
+}
+
+.formSwitchLabel {
+  flex: 1;
+}

@@ -1,0 +1,31 @@
+@use "./toRem.scss";
+@use "./utils.scss";
+
+.weather {
+  display: inline-flex;
+  align-items: center;
+  font-size: toRem.toRem(13);
+  gap: toRem.toRem(5);
+  animation: slideUp 0.4s ease forwards;
+  @include utils.respect-reduced-motion;
+  padding: toRem.toRem(8) toRem.toRem(3);
+  color: var(--shade-8);
+}
+
+.location {
+  padding: 0;
+  margin: 0;
+  color: var(--accent-6);
+  cursor: pointer;
+  font-size: toRem.toRem(14);
+
+  &:hover {
+    color: var(--accent-5);
+  }
+}
+
+.info {
+  display: flex;
+  gap: toRem.toRem(5);
+  align-items: center;
+}
