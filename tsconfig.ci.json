@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "globals.d.ts",
+    "next-env.d.ts",
+    "next-auth.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "migrate-components.js",
+    "**/*.native.ts",
+    "**/*.native.tsx",
+    ".next"
+  ]
+}

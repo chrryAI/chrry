@@ -1,0 +1,21 @@
+@use "./toRem.scss";
+
+.languages {
+  display: flex;
+  flex-direction: row;
+  gap: toRem.toRem(15);
+  font-size: toRem.toRem(14);
+  max-width: toRem.toRem(420);
+  flex-wrap: wrap;
+  margin-top: toRem.toRem(2.5);
+  justify-content: center;
+}
+
+.languageButton {
+  font-size: toRem.toRem(14);
+  cursor: pointer;
+}
+
+.active {
+  color: var(--shade-8);
+}

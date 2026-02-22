@@ -1,0 +1,54 @@
+@use "./toRem.scss";
+
+.grapeModal {
+  main,
+  footer {
+    font-size: toRem.toRem(14);
+  }
+}
+.icons {
+  display: flex;
+  justify-content: center;
+  gap: toRem.toRem(16);
+  margin-top: toRem.toRem(10);
+
+  .icon {
+    border-radius: toRem.toRem(40);
+    outline: toRem.toRem(1) dashed var(--shade-3);
+    padding: toRem.toRem(20);
+    img {
+      max-width: 100%;
+      flex: 1;
+    }
+
+    transition: all 0.2s ease-in-out;
+
+    &.selected {
+      outline: toRem.toRem(2) solid var(--accent-1);
+    }
+  }
+}
+
+.option {
+  .title {
+    margin-bottom: toRem.toRem(5);
+  }
+}
+
+.actions {
+  border-top: toRem.toRem(1) dashed var(--shade-3);
+  margin-top: toRem.toRem(20);
+  padding-top: toRem.toRem(10);
+}
+
+.adConsent {
+  display: flex;
+
+  gap: toRem.toRem(16);
+
+  &.adConsent {
+    > p {
+      flex: 1;
+    }
+  }
+}

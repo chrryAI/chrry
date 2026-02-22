@@ -1,0 +1,32 @@
+@use "./toRem.scss";
+
+.loadingCircle {
+  animation: rotation 1s linear infinite;
+  color: var(--accent-6);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: toRem.toRem(-468) 0;
+  }
+  100% {
+    background-position: toRem.toRem(468) 0;
+  }
+}
+
+.loadingWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100dvh;
+}

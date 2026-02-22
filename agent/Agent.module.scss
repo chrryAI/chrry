@@ -1,0 +1,205 @@
+@use "../breakpoints.scss";
+@use "../utils.scss";
+@use "../toRem.scss";
+
+.newAgent {
+  margin: 0 auto;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+  font-size: toRem.toRem(14);
+}
+
+.footer {
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  gap: toRem.toRem(7.5);
+  border-top: toRem.toRem(1) dashed var(--shade-2);
+  padding-top: toRem.toRem(10);
+
+  // &:empty {
+  //   display: none;
+  // }
+}
+
+.tabButton {
+  &:not(.currentTab):hover {
+    transition: all 0.2s ease;
+
+    transition: transform 0.2s ease;
+  }
+}
+
+.currentTab {
+  font-size: toRem.toRem(13);
+  margin: 0 toRem.toRem(5);
+}
+
+.placeholder {
+  flex: 1;
+}
+
+.instructionsContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  gap: toRem.toRem(12.5);
+}
+
+span.required {
+  font-size: toRem.toRem(14);
+  color: var(--accent-1);
+}
+
+.instructionsButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.select {
+  margin-left: auto;
+  border-radius: var(--radius);
+}
+
+.range {
+  margin-left: auto;
+  accent-color: var(--accent-1);
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.colorOptions {
+  display: flex;
+  gap: toRem.toRem(6);
+}
+
+.apiKeys {
+  display: flex;
+  gap: toRem.toRem(10);
+}
+
+.apiKeysDiv {
+  flex: 1;
+}
+
+.apiKeysLabel {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(15);
+  padding: toRem.toRem(10) 0 toRem.toRem(10) 0;
+}
+
+.bordered {
+  border-bottom: 1px dashed var(--shade-2);
+  padding-bottom: toRem.toRem(10);
+}
+
+.lastChild {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.firstChild {
+  border-bottom: none;
+  padding-top: 0;
+}
+
+.label {
+  font-size: toRem.toRem(15);
+  color: var(--shade-7);
+}
+.instructionsButton {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+
+  &.icon {
+    gap: toRem.toRem(0);
+  }
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(8.5);
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.settingsButton {
+  @media all and (display-mode: standalone) {
+    display: none;
+  }
+
+  animation: pulse 1s ease-in-out;
+  @include utils.respect-reduced-motion;
+
+  &.standalone {
+    display: none;
+  }
+}
+
+.settingsButton {
+  animation: pulse 1s ease-in-out;
+  @include utils.respect-reduced-motion;
+}
+
+.updateModalDescription {
+  textarea {
+    width: 100% !important;
+  }
+}
+
+.modal {
+  width: 100% !important;
+  max-width: toRem.toRem(550) !important;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(5);
+}
+
+.titleInput {
+  max-width: toRem.toRem(180) !important;
+
+  border: toRem.toRem(1) dashed var(--accent-1) !important;
+}
+
+.errorMessage {
+  font-size: toRem.toRem(12);
+  color: var(--accent-1);
+  animation: slideDown 0.2s ease-out;
+  font-weight: normal;
+}
+
+.error {
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

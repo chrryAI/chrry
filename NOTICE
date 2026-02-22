@@ -1,0 +1,21 @@
+Chrry - AI App Marketplace Platform
+Copyright (C) 2025 Iliyan Velinov
+https://github.com/chrryAI/chrry
+
+This software includes innovations in:
+- Cross-store AI app navigation system
+- Multi-tenant AI platform architecture  
+- Context-aware routing and app discovery
+- Guest-to-member conversion flow
+- Character profile system
+- watchOS-style spatial UI for AI apps
+
+Licensed under GNU Affero General Public License v3.0
+
+If you use this code, you must:
+1. Provide attribution to the original project
+2. Share any modifications under AGPL-3.0
+3. Include this notice in all copies
+4. Disclose source code if running as a network service
+
+For commercial licensing inquiries, contact: iliyan@chrry.ai

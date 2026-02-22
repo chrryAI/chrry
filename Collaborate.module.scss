@@ -1,0 +1,22 @@
+@use "./toRem.scss";
+@use "./breakpoints.scss";
+
+.collaborateTextarea {
+  min-height: toRem.toRem(200);
+  border-style: dashed;
+  font-size: toRem.toRem(15);
+}
+
+.modal {
+  width: 100% !important;
+  margin: 0 auto !important;
+  max-width: breakpoints.$breakpoint-mobile !important;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: toRem.toRem(7.5);
+  margin-top: toRem.toRem(10);
+  margin-left: auto;
+}

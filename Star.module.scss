@@ -1,0 +1,15 @@
+@use "./toRem.scss";
+
+.star {
+  display: inline-flex;
+  &.active {
+    display: inline-flex !important;
+  }
+  font-size: toRem.toRem(12);
+  & {
+    color: var(--shade-6);
+  }
+  &:hover {
+    color: var(--accent-1);
+  }
+}

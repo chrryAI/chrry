@@ -1,0 +1,7 @@
+@use "./breakpoints.scss";
+@use "./toRem.scss";
+
+.collaborationStatus {
+  display: inline-flex;
+  gap: toRem.toRem(10);
+}

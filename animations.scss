@@ -1,0 +1,163 @@
+@use "sass:math";
+@use "./toRem.scss";
+
+// Respect reduced motion preference
+@mixin respect-reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+// Slide animations
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(toRem.toRem(-20));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(toRem.toRem(20));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(20));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(toRem.toRem(-20));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Fade animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+// Scale animation
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Utility animations
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(toRem.toRem(-5));
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+// Animation mixins for easy application
+@mixin animate-slide-left($duration: 0.3s, $timing: ease-in-out) {
+  animation: slideLeft $duration $timing;
+  @include respect-reduced-motion;
+}
+
+@mixin animate-slide-right($duration: 0.3s, $timing: ease-in-out) {
+  animation: slideRight $duration $timing;
+  @include respect-reduced-motion;
+}
+
+@mixin animate-slide-up($duration: 0.3s, $timing: ease-in-out) {
+  animation: slideUp $duration $timing;
+  @include respect-reduced-motion;
+}
+
+@mixin animate-slide-down($duration: 0.3s, $timing: ease-in-out) {
+  animation: slideDown $duration $timing;
+  @include respect-reduced-motion;
+}
+
+@mixin animate-fade-in($duration: 0.3s, $timing: ease-in-out) {
+  animation: fadeIn $duration $timing;
+  @include respect-reduced-motion;
+}
+
+@mixin animate-scale-in($duration: 0.3s, $timing: ease-in-out) {
+  animation: scaleIn $duration $timing;
+  @include respect-reduced-motion;
+}

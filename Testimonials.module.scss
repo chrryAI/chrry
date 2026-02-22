@@ -1,0 +1,23 @@
+.testimonials {
+  margin-top: 15px;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.testimonial {
+  margin-bottom: 10px;
+  background: var(--shade-1);
+  border: 1px solid var(--shade-2);
+  padding: 15px;
+  border-radius: 20px;
+  position: relative;
+
+  .author {
+    color: var(--shade-5);
+    font-size: 14px;
+  }
+}

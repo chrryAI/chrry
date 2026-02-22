@@ -1,0 +1,85 @@
+@use "./toRem.scss";
+
+.messagesContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: toRem.toRem(20);
+  justify-content: flex-end;
+  align-content: flex-end;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(20);
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: toRem.toRem(10);
+}
+
+.emptyContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: toRem.toRem(10);
+  color: var(--shade-6);
+}
+
+.characterProfileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: toRem.toRem(25);
+  gap: toRem.toRem(10);
+  color: var(--shade-6);
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.loading {
+  display: flex;
+  gap: toRem.toRem(5);
+  margin-top: toRem.toRem(30);
+  flex-direction: row;
+  font-size: toRem.toRem(15);
+  color: var(--shade-6);
+}
+
+.enableCharacterProfilesContainer {
+  display: flex;
+  justify-content: center;
+  margin: toRem.toRem(25) 0;
+}
+
+.enabledCharacterProfiles {
+  font-size: toRem.toRem(14);
+}
+
+.video {
+  width: toRem.toRem(30);
+  height: toRem.toRem(30);
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none; // So clicks pass through to foreground content
+}
+
+.characterProfileActions {
+  display: flex;
+  gap: toRem.toRem(1);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: toRem.toRem(5);
+  max-width: toRem.toRem(300);
+  font-size: toRem.toRem(12);
+}

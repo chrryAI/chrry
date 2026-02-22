@@ -1,0 +1,8 @@
+@use "toRem.scss";
+
+$breakpoint-mobile: toRem.toRem(600);
+$breakpoint-mobile-max: toRem.toRem(599);
+$breakpoint-mobile-small: toRem.toRem(430);
+$breakpoint-mobile-small-max: toRem.toRem(320);
+$breakpoint-tablet: toRem.toRem(800);
+$breakpoint-desktop: toRem.toRem(960);

@@ -1,0 +1,126 @@
+@use "../breakpoints.scss";
+@use "../toRem.scss";
+
+.ossLink,
+.oss {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ossWrapper {
+  margin-bottom: toRem.toRem(20);
+  display: flex;
+  flex-direction: column;
+}
+
+.ossContainer {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+
+  @media (min-width: breakpoints.$breakpoint-mobile) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.ossContainerDesktop {
+  flex-direction: row;
+  align-items: center;
+}
+
+.apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: toRem.toRem(15);
+  margin: toRem.toRem(15) 0;
+  cursor: pointer;
+}
+
+.app {
+  flex: 1;
+  min-width: toRem.toRem(200);
+  padding: toRem.toRem(15);
+  border: 1px dashed var(--shade-2);
+  border-radius: toRem.toRem(20);
+  display: flex;
+  flex-direction: column;
+  gap: toRem.toRem(10);
+
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border: 1px solid var(--accent-1);
+    background-color: var(--shade-1);
+  }
+
+  h4 {
+    margin: 0;
+    font-size: toRem.toRem(15);
+    margin-bottom: toRem.toRem(8);
+    display: flex;
+    gap: toRem.toRem(5);
+  }
+}
+
+.h2 {
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+}
+
+.signInButton {
+  margin-left: auto;
+  font-size: 13px;
+}
+
+.appDescription {
+  font-size: toRem.toRem(13);
+  color: var(--shade-6);
+}
+
+.video {
+  width: 100%;
+  max-width: 100%;
+  margin-top: toRem.toRem(10);
+  border-radius: toRem.toRem(10);
+}
+
+.copyright {
+  margin-bottom: toRem.toRem(20);
+}
+
+.about {
+  section {
+    font-size: toRem.toRem(15);
+    h2,
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+}
+
+.oss {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  > li {
+    > a {
+      svg {
+        color: var(--foreground);
+      }
+    }
+  }
+}
+
+.lastUpdated {
+  font-size: toRem.toRem(13);
+  color: var(--shade-6);
+  display: flex;
+  align-items: center;
+  gap: toRem.toRem(5);
+  margin-top: toRem.toRem(20);
+}
