@@ -1,0 +1,6 @@
+@use "./toRem.scss";
+
+.container {
+  max-width: toRem.toRem(800);
+  margin: 0 auto;
+}

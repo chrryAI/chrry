@@ -1,0 +1,74 @@
+import clsx from "clsx"
+import type React from "react"
+import { useAppContext } from "./context/AppContext"
+import { useAuth } from "./context/providers/AuthProvider"
+import { useStyles } from "./context/StylesContext"
+import { useHasHydrated } from "./hooks"
+import { Moon, Sun } from "./icons"
+import { Button, Div, useTheme } from "./platform"
+import { ANALYTICS_EVENTS } from "./utils/analyticsEvents"
+
+export default function ThemeSwitcher({
+  onThemeChange,
+  size = 18,
+  style,
+  dataTestId,
+}: {
+  onThemeChange?: (theme: "#000000" | "#ffffff") => void
+  size?: number
+  style?: React.CSSProperties
+  dataTestId?: string
+}) {
+  const hasHydrated = useHasHydrated()
+  const {
+    isDark,
+    setTheme: setThemeInternal,
+    colorScheme,
+    setIsThemeLocked,
+  } = useTheme()
+
+  const { t } = useAppContext()
+
+  const { plausible } = useAuth()
+
+  const setTheme = (item: "light" | "dark") => {
+    setIsThemeLocked(true)
+    setThemeInternal(item)
+    plausible({
+      name: ANALYTICS_EVENTS.THEME_CHANGE,
+      props: {
+        // theme,
+        colorScheme,
+        isDark,
+      },
+    })
+  }
+
+  const { utilities } = useStyles()
+
+  return (
+    <Div>
+      {hasHydrated && (
+        <Button
+          data-testid={dataTestId + (isDark ? "-light" : "-dark")}
+          title={isDark ? t("Light") : t("Dark")}
+          aria-label={
+            isDark ? t("Switch to light mode") : t("Switch to dark mode")
+          }
+          onClick={() => {
+            setTheme(isDark ? "light" : "dark")
+            onThemeChange?.(!isDark ? "#000000" : "#ffffff")
+          }}
+          style={{ ...utilities.link.style, ...style }}
+          className={clsx("link")}
+        >
+          {isDark ? (
+            <Sun color="var(--accent-1)" size={size} />
+          ) : (
+            <Moon color="var(--shade-7)" size={size} />
+          )}
+        </Button>
+      )}
+    </Div>
+  )
+}
